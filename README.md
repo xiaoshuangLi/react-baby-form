@@ -3,6 +3,7 @@
 Easy form for react to use.
 
 [Demo](https://codepen.io/xiaoshuang/pen/JwLmPm)
+[Ant-Design Demo](https://codepen.io/xiaoshuang/pen/KboGxo)
 
 ## Installation
 
