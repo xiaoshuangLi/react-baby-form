@@ -1,0 +1,22 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+.idea/
+
+# webpack-visualizer-plugin
+bundle-stats.html
+
+# assets
+assets/
+public/
+example/public/
+lib/
+
+# Dependency directories
+node_modules
+
+# webpack isomorphic
+webpack-assets.json
+webpack-stats.json

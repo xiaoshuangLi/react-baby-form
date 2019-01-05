@@ -1,0 +1,151 @@
+$blue: rgb(100, 179, 244);
+$blue2: #60e5ff;
+
+$green: rgb(194, 229, 156);
+
+$pink: #ff3366;
+$red: #ff5d5d;
+$orange: #ffa24a;
+
+$grey: #f0f2f5;
+$grey2: #f4f4f4;
+
+$black: #333;
+$black2: #666;
+$black3: #999;
+$black4: #ccc;
+
+%input {
+  border: 1px solid $black4;
+  border-radius: 3px;
+  padding: 5px;
+  width: 100%;
+
+  &::-webkit-input-placeholder {
+    color: $black3;
+  }
+}
+
+%percenter {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+%active-opacity {
+  transition: .2s;
+
+  &:active,
+  &:hover {
+    opacity: .7;
+  }
+}
+
+@mixin baseItem {
+  .base-item {
+    &.base-required {
+      .item-title {
+        &:before {
+          content: '*';
+          color: $red;
+          padding-right: 5px;
+        }
+      }
+    }
+
+    & + .base-item {
+      margin-top: 10px;
+    }
+
+    .item-title {
+
+    }
+
+    .item-children {
+
+    }
+  }
+}
+
+@mixin baseForm {
+  .base-form {
+    .item-input {
+      padding: 5px 0;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $black3;
+    }
+
+    & + * {
+      margin-top: 20px;
+    }
+  }
+}
+
+@mixin baseButton {
+  .base-button {
+    text-align: center;
+
+    .button {
+      display: inline-block;
+      padding: 0 5px;
+      color: $blue;
+      cursor: pointer;
+      border-bottom: 1px solid currentColor;
+
+      @extend %active-opacity;
+    }
+  }
+}
+
+@mixin baseErrors {
+  .base-errors {
+    position: absolute;
+    padding: 10px 15px;
+    width: 100%;
+    left: 0;
+    top: calc(100% + 10px);
+    color: $red;
+    background: lighten($red, 25);
+
+    &:empty {
+      display: none;
+    }
+
+    > * {
+      word-break: break-all;
+    }
+
+    .errors-item {
+      & + .errors-item {
+        margin-top: 10px;
+      }
+
+      .item-title {
+
+      }
+
+      .item-message {
+        .message-part {
+
+        }
+      }
+    }
+  }
+}
+
+.pages-home-base-render {
+  width: 300px;
+  padding: 10px 15px;
+  background-color: white;
+  border: 1px solid $black4;
+
+  @extend %percenter;
+
+  @include baseItem;
+
+  @include baseForm;
+  @include baseButton;
+  @include baseErrors;
+}

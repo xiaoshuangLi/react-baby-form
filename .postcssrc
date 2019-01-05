@@ -1,0 +1,8 @@
+{
+  "plugins":
+  {
+    "postcss-preset-env": {},
+    "postcss-write-svg": {},
+    "postcss-reporter": {}
+  }
+}
