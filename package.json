@@ -1,5 +1,5 @@
 {
-  "name": "react-pure-form",
+  "name": "react-baby-form",
   "version": "1.0.1",
   "description": "",
   "license": "MIT",
@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/xiaoshuangLi/react-pure-form"
+    "url": "https://github.com/xiaoshuangLi/react-baby-form"
   },
   "scripts": {
     "start": "npm run production",

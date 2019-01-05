@@ -25,7 +25,7 @@ module.exports = {
       'example-js': path.resolve(projectFolder, 'src/js'),
       'example-css': path.resolve(projectFolder, 'src/css'),
       'example-img': path.resolve(projectFolder, 'src/img'),
-      'react-pure-form': path.resolve(projectFolder, '../src'),
+      'react-baby-form': path.resolve(projectFolder, '../src'),
     },
     extensions: ['.js', '.jsx', '.scss'],
   },

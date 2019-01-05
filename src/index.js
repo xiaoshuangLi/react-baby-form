@@ -1,3 +1,3 @@
-export * from './components/PureForm';
+export * from './components/BabyForm';
 
-export { default } from './components/PureForm';
+export { default } from './components/BabyForm';

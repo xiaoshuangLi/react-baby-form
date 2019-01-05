@@ -1,4 +1,4 @@
-# react-pure-form
+# react-baby-form
 
 Easy form for react to use.
 
@@ -7,14 +7,14 @@ Easy form for react to use.
 ## Installation
 
 ```sh
-npm install --save react-pure-form
+npm install --save react-baby-form
 ```
 
 ### Usage
 
 ```jsx
 import React, { Component, createRef } from 'react';
-import PureForm, { submit } from 'react-pure-form';
+import BabyForm, { submit } from 'react-baby-form';
 
 class Base extends Components {
   formRef = createRef();
@@ -37,7 +37,7 @@ class Base extends Components {
     const { value = {} } = this.state;
 
     return (
-      <Pureform value={value} onChange={this.onChangeForm}>
+      <Babyform value={value} onChange={this.onChangeForm}>
         <input
           type="text"
           _name="name"
@@ -56,7 +56,7 @@ class Base extends Components {
           _min={18}
           _max={100}
           />
-      </Pureform>
+      </Babyform>
     );
   }
 
@@ -80,12 +80,12 @@ class Base extends Components {
 
 ### API
 
-#### PureForm
+#### BabyForm
 
 ```jsx
 {
-  value: {}, // PropTypes.Object, value from PureForm
-  warning: {}, // PropTypes.Object, warning message from PureForm
+  value: {}, // PropTypes.Object, value from BabyForm
+  warning: {}, // PropTypes.Object, warning message from BabyForm
   Container: 'div', // PropTypes.element, The container for render.
   onChange: () => value. // PropTypes.func, Trigger when value change.
   onError: () => error. // PropTypes.func, Trigger when some children value don't pass, only return one error.
@@ -94,7 +94,7 @@ class Base extends Components {
 
 #### submit
 
-Validate PureForm and return ```Promise```. Just like this:
+Validate BabyForm and return ```Promise```. Just like this:
 
 ```jsx
   ref => new Promise();

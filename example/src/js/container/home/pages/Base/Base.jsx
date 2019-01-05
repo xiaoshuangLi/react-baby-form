@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import PureForm, { submit } from 'react-pure-form';
+import BabyForm, { submit } from 'react-baby-form';
 
 const Item = (props = {}) => {
   const {
@@ -148,7 +148,7 @@ class Base extends Component {
     });
 
     return (
-      <PureForm
+      <BabyForm
         value={value}
         className={cls}
         ref={this.formRef}
@@ -156,7 +156,7 @@ class Base extends Component {
         { this.renderForm() }
         { this.renderButton() }
         { this.renderErrors() }
-      </PureForm>
+      </BabyForm>
     );
   }
 }

@@ -22,9 +22,9 @@ module.exports = {
     publicPath: '/',
     filename: 'index.js',
     library: {
-      root: 'ReactPureForm',
-      amd: 'ReactPureForm',
-      commonjs: 'react-pure-form',
+      root: 'ReactBabyForm',
+      amd: 'ReactBabyForm',
+      commonjs: 'react-baby-form',
     },
     libraryTarget: 'umd',
   },

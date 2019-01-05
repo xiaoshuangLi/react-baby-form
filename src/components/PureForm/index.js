@@ -1,3 +1,3 @@
-export * from './PureForm';
+export * from './BabyForm';
 
-export { default } from './PureForm';
+export { default } from './BabyForm';

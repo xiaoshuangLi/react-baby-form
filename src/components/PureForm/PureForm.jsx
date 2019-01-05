@@ -48,7 +48,7 @@ const childPropsKeys = [
   '_fn',
 ];
 
-class PureForm extends Component {
+class BabyForm extends Component {
   static defaultProps = {
     value: {},
     onChange: undefined,
@@ -247,7 +247,7 @@ class PureForm extends Component {
     } = this.props;
 
     const cls = classnames({
-      'components-pure-form-render': true,
+      'components-baby-form-render': true,
       [className]: !!className,
     });
 
@@ -264,7 +264,7 @@ const getRefErrorObj = (ref) => ([
     key: 'ref',
     value: ref,
     errors: [
-      { message: 'PureForm Ref not work' },
+      { message: 'BabyForm Ref not work' },
     ],
   }
 ]);
@@ -281,4 +281,4 @@ export const submit = (ref) => {
   return current._submit();
 };
 
-export default PureForm;
+export default BabyForm;
