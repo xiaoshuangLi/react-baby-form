@@ -2,7 +2,7 @@
 
 Easy form for react to use.
 
-[Demo](https://codepen.io/xiaoshuang/pen/YLyxbZ)
+[Demo](https://codepen.io/xiaoshuang/pen/JwLmPm)
 
 ## Installation
 
