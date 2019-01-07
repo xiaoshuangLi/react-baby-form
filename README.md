@@ -102,32 +102,6 @@ Validate BabyForm and return ```Promise```. Just like this:
   ref => new Promise();
 ```
 
-#### Children Props
-
-```jsx
-{
-  _ignore: false, // PropTypes.bool, ignore this node
-  _stop: false, // PropTypes.bool, stop recursive this node children
-
-  _error: false, // PropTypes.bool, save errors to props
-  errors: [], // PropTypes.Array, need set _error be true.
-
-  _name: '', // PropTypes.string, attribute in value
-  _title: '', // PropTypes.string, to show in error message
-
-  _triggerAttr: 'onChange', // PropTypes.string
-  _valueAttr: 'value', // PropTypes.string
-
-  _maxLength: undefined, // PropTypes.number
-  _minLength: undefined, // PropTypes.number
-  _max: undefined, // PropTypes.number
-  _min: undefined, // PropTypes.number
-  _required: undefined, // PropTypes.bool
-  _pattern: undefined, // RegExp
-  _fn: undefined // PropTypes.function, value => PropTypes.bool, validate it anyway you like
-}
-```
-
 #### Default warning 
 
 ```jsx
@@ -179,5 +153,31 @@ Validate BabyForm and return ```Promise```. Just like this:
   errors: [
     message: '', // from warning
   ],
+}
+```
+
+#### Children Props
+
+```jsx
+{
+  _ignore: false, // PropTypes.bool, ignore this node
+  _stop: false, // PropTypes.bool, stop recursive this node children
+
+  _error: false, // PropTypes.bool, save errors to props
+  errors: [], // PropTypes.Array, need set _error be true.
+
+  _name: '', // PropTypes.string, attribute in value
+  _title: '', // PropTypes.string, to show in error message
+
+  _triggerAttr: 'onChange', // PropTypes.string
+  _valueAttr: 'value', // PropTypes.string
+
+  _maxLength: undefined, // PropTypes.number
+  _minLength: undefined, // PropTypes.number
+  _max: undefined, // PropTypes.number
+  _min: undefined, // PropTypes.number
+  _required: undefined, // PropTypes.bool
+  _pattern: undefined, // RegExp
+  _fn: undefined // PropTypes.function, value => PropTypes.bool, validate it anyway you like
 }
 ```
