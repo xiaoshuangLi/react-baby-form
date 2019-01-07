@@ -4,7 +4,7 @@ Easy form for react to use.
 
 [Demo](https://codepen.io/xiaoshuang/pen/JwLmPm)
 
-[Ant-Design Demo](https://codepen.io/xiaoshuang/pen/KboGxo)
+[react-antd-form Demo](https://codepen.io/xiaoshuang/pen/KboGxo), Base on Antd-Design.
 
 ## Installation
 
