@@ -12,9 +12,14 @@ const runMaxLength = runBy((value = '', maxLength) => value.length <= maxLength)
 const runMinLength = runBy((value = '', minLength) => value.length >= minLength);
 const runMax = runBy((value, max) => value <= max);
 const runMin = runBy((value, min) => value >= min);
-const runRequired = runBy((value, required) => required && !useless.includes(value));
 const runPattern = runBy((value = '', pattern) => pattern && new RegExp(pattern).test(value));
 const runFn = runBy((value = '', fn) => fn && fn(value));
+const runRequired = runBy((value, required) => {
+  const bool = !!required;
+  const useful = !useless.includes(value);
+
+  return bool ? useful : true;
+});
 
 const runObj = {
   maxLength: runMaxLength,
