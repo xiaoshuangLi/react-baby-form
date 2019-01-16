@@ -1,6 +1,7 @@
 # react-baby-form
 
 Easy form for react to use.
+Some other choice, like [react-antd-form](https://github.com/xiaoshuangLi/react-baby-form), form with [antd-design](https://github.com/ant-design/ant-design) style;
 
 [Demo](https://codepen.io/xiaoshuang/pen/JwLmPm)
 
