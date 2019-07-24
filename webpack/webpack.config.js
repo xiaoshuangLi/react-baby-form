@@ -190,7 +190,6 @@ module.exports = {
             comments: false,
           },
           compress: {
-            warnings: false,
             collapse_vars: true,
             reduce_vars: true,
           },
