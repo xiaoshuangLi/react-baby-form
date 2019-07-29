@@ -1,8 +1,80 @@
-import {
+import React, {
   Children,
   isValidElement,
   cloneElement,
 } from 'react';
+
+/**
+ * childProps
+{
+  _ignore: false, ignore this node
+  _stop: false, stop recursive this node children
+  _error: false, save errors to props
+
+  errors: [],
+
+  _name: '', // 字段 => name
+  _title: '', // 字段名 => 名字
+  _triggerAttr: 'onChange',
+  _valueAttr: 'value',
+
+  _maxLength: undefined, Number
+  _minLength: undefined, Number
+  _max: undefined, Number
+  _min: undefined, Number
+  _required: undefined, Bool
+  _pattern: undefined, Reg
+  _fn: undefined, func, () => Bool
+}
+ */
+
+const childPropsKeys = [
+  '_ignore',
+  '_stop',
+  '_error',
+  '_name',
+  '_title',
+  '_triggerAttr',
+  '_valueAttr',
+  '_maxLength',
+  '_minLength',
+  '_max',
+  '_min',
+  '_required',
+  '_pattern',
+  '_fn',
+];
+
+export const getNeatProps = (props = {}) => {
+  const keys = Object.keys(props);
+
+  return keys.reduce((res = {}, key) => {
+    if (!childPropsKeys.includes(key)) {
+      res[key] = props[key];
+    }
+
+    return res;
+  }, {});
+};
+
+export const getNeatElement = (element = {}) => {
+  const {
+    key,
+    ref,
+    type: Comp,
+    props = {},
+  } = element;
+
+  const neatProps = getNeatProps(props);
+
+  return (
+    <Comp
+      key={key}
+      ref={ref}
+      {...neatProps}
+    />
+  );
+};
 
 export const recursiveMap = (children, fn) => Children.map(children, (child = {}) => {
   const valid = isValidElement(child);
@@ -12,10 +84,15 @@ export const recursiveMap = (children, fn) => Children.map(children, (child = {}
   }
 
   const { props = {} } = child;
-  const { _stop, _ignore, _name, children: propsChildren } = props;
+  const {
+    _stop,
+    _ignore,
+    _name,
+    children: propsChildren,
+  } = props;
 
   if (_ignore) {
-    return child;
+    return getNeatElement(child);
   }
 
   if (propsChildren && !_stop) {
@@ -35,7 +112,12 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
   }
 
   const { props = {} } = child;
-  const { _stop, _ignore, _name, children: propsChildren } = props;
+  const {
+    _stop,
+    _ignore,
+    _name,
+    children: propsChildren,
+  } = props;
 
   if (_ignore) {
     return;

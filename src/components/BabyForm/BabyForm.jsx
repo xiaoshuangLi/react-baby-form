@@ -5,48 +5,12 @@ import classnames from 'classnames';
 import check from './check';
 import warn from './warn';
 
-import { recursiveMap, recursiveForeach, getValueFromEvent } from './utils';
-
-/**
- * childProps
-{
-  _ignore: false, ignore this node
-  _stop: false, stop recursive this node children
-  _error: false, save errors to props
-
-  errors: [],
-
-  _name: '', // 字段 => name
-  _title: '', // 字段名 => 名字
-  _triggerAttr: 'onChange',
-  _valueAttr: 'value',
-
-  _maxLength: undefined, Number
-  _minLength: undefined, Number
-  _max: undefined, Number
-  _min: undefined, Number
-  _required: undefined, Bool
-  _pattern: undefined, Reg
-  _fn: undefined, func, () => Bool
-}
- */
-
-const childPropsKeys = [
-  '_ignore',
-  '_stop',
-  '_error',
-  '_name',
-  '_title',
-  '_triggerAttr',
-  '_valueAttr',
-  '_maxLength',
-  '_minLength',
-  '_max',
-  '_min',
-  '_required',
-  '_pattern',
-  '_fn',
-];
+import {
+  getNeatProps,
+  recursiveMap,
+  recursiveForeach,
+  getValueFromEvent,
+} from './utils';
 
 class BabyForm extends Component {
   static defaultProps = {
@@ -162,10 +126,7 @@ class BabyForm extends Component {
 
     const initProps = _error ? { errors } : {};
     const staticProps = Object.assign(initProps, childProps);
-    const baseProps = childPropsKeys.reduce((a, key) => {
-      delete a[key];
-      return a;
-    }, staticProps);
+    const baseProps = getNeatProps(staticProps);
 
     const props = Object.assign({}, baseProps, {
       [_triggerAttr]: trigger,
@@ -260,14 +221,14 @@ class BabyForm extends Component {
   }
 }
 
-const getRefErrorObj = (ref) => ([
+const getRefErrorObj = ref => ([
   {
     key: 'ref',
     value: ref,
     errors: [
       { message: 'BabyForm Ref not work' },
     ],
-  }
+  },
 ]);
 
 export const submit = (ref) => {
