@@ -76,7 +76,7 @@ class BabyForm extends Component {
         return Object.assign({}, a, { [key]: childValue[index] });
       }, {});
     } else {
-      obj = { [_name]: childValue }; 
+      obj = { [_name]: childValue };
     }
 
     const baseValue = Array.isArray(propsValue) ? [] : {};

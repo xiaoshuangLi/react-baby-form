@@ -53,10 +53,16 @@ export function getValueFromEvent(event) {
     return event;
   }
 
+  event = event.nativeEvent === undefined ? event : event.nativeEvent;
+
   const target = event.target === undefined ? event : event.target;
   const value = target.value === undefined ? target : target.value;
 
-  return value;
+  if (target instanceof HTMLElement) {
+    return target.type === 'checkbox' ? target.checked : value;
+  }
+
+  return target;
 }
 export default {
   recursiveMap,
