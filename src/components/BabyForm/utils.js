@@ -146,8 +146,13 @@ export function getValueFromEvent(event) {
 
   return target;
 }
-export default {
-  recursiveMap,
-  recursiveForeach,
-  getValueFromEvent,
-};
+
+export function getCurrentFromRef(ref) {
+  if (!ref) {
+    return ref;
+  }
+
+  const { current = ref } = ref;
+
+  return current;
+}

@@ -133,7 +133,7 @@ class Base extends Component {
 
     return (
       <div className="base-errors">
-        { items } 
+        { items }
       </div>
     );
   }

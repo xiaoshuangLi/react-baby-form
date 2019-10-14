@@ -1,6 +1,6 @@
 {
   "name": "react-baby-form",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,7 +25,7 @@
     "production:server": "better-npm-run production:server",
     "production:services": "npm-run-all --parallel production:server",
     "build": "rm -rf lib && webpack --config webpack/webpack.config.umd.js &&  webpack --config webpack/webpack.config.prd.js",
-    "prepare": "npm run build && rm ./lib/*.html"
+    "prepublishOnly": "npm run build && rm ./lib/*.html"
   },
   "betterScripts": {
     "production:server": {
@@ -40,13 +40,17 @@
   ],
   "author": "Xiaoshuang",
   "homepage": "https://xiaoshuangli.github.io/web-just-for-fun/",
+  "peerDependencies": {
+    "react": ">=16.8.6",
+    "react-dom": ">=16.8.6"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "prop-types": "^15.6.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   },
-  "devDependencies": {
+  "devDependencies": {  
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",

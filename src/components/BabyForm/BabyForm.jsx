@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useMemo,
+  useContext,
+  useImperativeHandle,
+} from 'react';
 import classnames from 'classnames';
 
 import check from './check';
@@ -10,28 +13,130 @@ import {
   recursiveMap,
   recursiveForeach,
   getValueFromEvent,
+  getCurrentFromRef,
 } from './utils';
 
-class BabyForm extends Component {
-  static defaultProps = {
-    value: {},
-    onChange: undefined,
-    onError: undefined,
-    warning: undefined,
-    Container: 'div',
-    _stop: true,
-  };
+import { ParentContext, useEventCallback } from './hooks';
 
-  onChange = (...list) => {
-    this._changeChild(...list);
-    this._checkChild(...list);
-  }
+const { Provider } = ParentContext;
 
-  _changeChild(childProps = {}, e) {
+const Baby = React.forwardRef((props = {}, ref) => {
+  const {
+    Comp,
+    _triggerAttr = 'onChange',
+    _valueAttr = 'value',
+    _error = false,
+  } = props;
+
+  const baseTrigger = props[_triggerAttr];
+  const parent = useContext(ParentContext) || {};
+
+  const value = parent.getValue(props);
+  const errors = parent.getErrorsWithMessage(props, value);
+  const trigger = useEventCallback((...list) => {
+    const [e = {}] = list;
+
+    e.stopPropagation && e.stopPropagation();
+    baseTrigger && baseTrigger(...list);
+
+    parent.onChange(props, ...list);
+  });
+
+  const initProps = _error ? { errors } : {};
+  const staticProps = Object.assign(initProps, props);
+  const baseProps = getNeatProps(staticProps);
+
+  const restProps = Object.assign({}, baseProps, {
+    [_triggerAttr]: trigger,
+    [_valueAttr]: value,
+  });
+
+  return (
+    <Comp ref={ref} {...restProps} />
+  );
+});
+
+const MemoBaby = React.memo(Baby);
+
+const renderChild = (child = {}) => {
+  const {
+    key,
+    type,
+    ref: childRef,
+    props: childProps = {},
+  } = child;
+
+  return (
+    <MemoBaby key={key} ref={childRef} Comp={type} {...childProps} />
+  );
+};
+
+const renderChildren = children => recursiveMap(children, renderChild);
+
+const BabyForm = React.forwardRef((props = {}, ref) => {
+  const {
+    className,
+    Container,
+    children,
+    _stop,
+    warning,
+    value: propsValue,
+    onChange: propsOnChange,
+    onError: propsOnError,
+    ...others
+  } = props;
+
+  const cls = classnames({
+    'components-baby-form-render': true,
+    [className]: !!className,
+  });
+
+  const getValue = useEventCallback((childProps = {}) => {
+    const { _name = '' } = childProps;
+
+    if (Array.isArray(_name)) {
+      return _name.map(item => propsValue[item]);
+    }
+
+    return propsValue[_name];
+  });
+
+  const getErrorsWithMessage = useEventCallback((childProps = {}, e) => {
+    const childValue = getValueFromEvent(e);
+    const warnFn = warn(warning);
+
+    const errors = check(childValue, childProps);
+
+    return errors.map((error = {}) => {
+      const message = warnFn(childValue, error, childProps);
+
+      return Object.assign({}, error, { message });
+    });
+  });
+
+  const onErrorChild = useEventCallback((childProps = {}, e) => {
     const { _name } = childProps;
     const childValue = getValueFromEvent(e);
 
-    const { value: propsValue = {}, onChange } = this.props;
+    const errors = getErrorsWithMessage(childProps, e);
+    const { length } = errors;
+
+    if (!length) {
+      return;
+    }
+
+    const obj = {
+      errors,
+      key: _name,
+      value: childValue,
+    };
+
+    propsOnError && propsOnError(obj);
+  });
+
+  const onChangeChild = useEventCallback((childProps = {}, e) => {
+    const { _name } = childProps;
+    const childValue = getValueFromEvent(e);
 
     let obj;
 
@@ -46,119 +151,22 @@ class BabyForm extends Component {
     const baseValue = Array.isArray(propsValue) ? [] : {};
     const value = Object.assign(baseValue, propsValue, obj);
 
-    onChange && onChange(value);
-  }
+    propsOnChange && propsOnChange(value);
+  });
 
-  _getErrorsWithMessage(childProps = {}, e) {
-    const { warning } = this.props;
+  const onChange = useEventCallback((...list) => {
+    onErrorChild(...list);
+    onChangeChild(...list);
+  });
 
-    const childValue = getValueFromEvent(e);
-    const warnFn = warn(warning);
+  const providerValue = useMemo(() => ({
+    getValue,
+    getErrorsWithMessage,
+    onChange,
+  }), [getValue, getErrorsWithMessage, onChange]);
 
-    const errors = check(childValue, childProps);
-
-    return errors.map((error = {}) => {
-      const message = warnFn(childValue, error, childProps);
-
-      return Object.assign({}, error, { message });
-    });
-  }
-
-  _checkChild(childProps = {}, e) {
-    const { _name } = childProps;
-    const { onError } = this.props;
-    const childValue = getValueFromEvent(e);
-
-    const errors = this._getErrorsWithMessage(childProps, e);
-    const { length } = errors;
-
-    if (!length) {
-      return;
-    }
-
-    const obj = {
-      errors,
-      key: _name,
-      value: childValue,
-    };
-
-    onError && onError(obj);
-  }
-
-  _getValue = (childProps = {}) => {
-    const { value: propsValue = {} } = this.props;
-    const { _name = '' } = childProps;
-
-    if (Array.isArray(_name)) {
-      return _name.map(item => propsValue[item]);
-    }
-
-    return propsValue[_name];
-  }
-
-  _getTrigger = (childProps = {}) => {
-    const { _triggerAttr = 'onChange' } = childProps;
-
-    const baseTrigger = childProps[_triggerAttr];
-
-    const trigger = (...list) => {
-      const [e = {}] = list;
-
-      e.stopPropagation && e.stopPropagation();
-      baseTrigger && baseTrigger(...list);
-
-      this.onChange(childProps, ...list);
-    };
-
-    return trigger;
-  }
-
-  _getChildProps = (childProps = {}) => {
-    const {
-      _triggerAttr = 'onChange',
-      _valueAttr = 'value',
-      _error = false,
-    } = childProps;
-
-    const value = this._getValue(childProps);
-    const trigger = this._getTrigger(childProps);
-    const errors = this._getErrorsWithMessage(childProps, value);
-
-    const initProps = _error ? { errors } : {};
-    const staticProps = Object.assign(initProps, childProps);
-    const baseProps = getNeatProps(staticProps);
-
-    const props = Object.assign({}, baseProps, {
-      [_triggerAttr]: trigger,
-      [_valueAttr]: value,
-    });
-
-    return props;
-  }
-
-  _setupChild = (child = {}) => {
-    const {
-      props: childProps = {},
-      type: ChildComp,
-      ref,
-      key,
-    } = child;
-
-    const props = this._getChildProps(childProps);
-
-    return (
-      <ChildComp
-        ref={ref}
-        key={key}
-        {...props}
-        />
-    );
-  }
-
-  _submit = () => {
+  const submit = useEventCallback(() => {
     return new Promise((resolve, reject) => {
-      const { children, value = {} } = this.props;
-
       const res = [];
 
       recursiveForeach(children, (child = {}) => {
@@ -169,8 +177,8 @@ class BabyForm extends Component {
           return;
         }
 
-        const childValue = this._getValue(childProps);
-        const childErrors = this._getErrorsWithMessage(childProps, childValue);
+        const childValue = getValue(childProps);
+        const childErrors = getErrorsWithMessage(childProps, childValue);
         const { length } = childErrors;
 
         if (!length) {
@@ -186,61 +194,48 @@ class BabyForm extends Component {
         res.push(obj);
       });
 
-      res.length ? reject(res) : resolve(value);
+      res.length ? reject(res) : resolve(propsValue);
     });
-  }
+  });
 
-  renderChildren() {
-    const { children } = this.props;
+  useImperativeHandle(ref, () => ({ submit }), [submit]);
 
-    return recursiveMap(children, this._setupChild);
-  }
-
-  render() {
-    const {
-      className,
-      value,
-      onChange,
-      onError,
-      Container,
-      _stop,
-      children,
-      ...others
-    } = this.props;
-
-    const cls = classnames({
-      'components-baby-form-render': true,
-      [className]: !!className,
-    });
-
-    return (
+  return (
+    <Provider value={providerValue}>
       <Container className={cls} {...others}>
-        { this.renderChildren() }
+        { renderChildren(children) }
       </Container>
-    );
-  }
-}
+    </Provider>
+  );
+});
 
-const getRefErrorObj = ref => ([
-  {
-    key: 'ref',
-    value: ref,
-    errors: [
-      { message: 'BabyForm Ref not work' },
-    ],
-  },
-]);
-
-export const submit = (ref) => {
-  const { current = ref } = ref;
-
-  if (!current) {
-    const obj = getRefErrorObj(ref);
-
-    return Promise.reject(obj);
-  }
-
-  return current._submit();
+BabyForm.defaultProps = {
+  value: {},
+  onChange: undefined,
+  onError: undefined,
+  warning: undefined,
+  Container: 'div',
+  _stop: true,
 };
 
-export default BabyForm;
+export const submit = (ref) => {
+  const current = getCurrentFromRef(ref);
+
+  if (!current) {
+    const error = [
+      {
+        key: 'ref',
+        value: ref,
+        errors: [
+          { message: 'BabyForm Ref not work' },
+        ],
+      },
+    ];
+
+    return Promise.reject(error);
+  }
+
+  return current.submit();
+};
+
+export default React.memo(BabyForm);
