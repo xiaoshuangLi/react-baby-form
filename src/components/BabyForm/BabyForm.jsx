@@ -23,15 +23,15 @@ const { Provider } = ParentContext;
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
     Comp,
-    _triggerAttr = 'onChange',
     _valueAttr = 'value',
+    _triggerAttr = 'onChange',
     _error = false,
   } = props;
 
+  const value = props[_valueAttr];
   const baseTrigger = props[_triggerAttr];
   const parent = useContext(ParentContext) || {};
 
-  const value = parent.getValue(props);
   const errors = parent.getErrorsWithMessage(props, value);
   const trigger = useEventCallback((...list) => {
     const [e = {}] = list;
@@ -48,7 +48,6 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
   const restProps = Object.assign({}, baseProps, {
     [_triggerAttr]: trigger,
-    [_valueAttr]: value,
   });
 
   return (
@@ -57,21 +56,6 @@ const Baby = React.forwardRef((props = {}, ref) => {
 });
 
 const MemoBaby = React.memo(Baby);
-
-const renderChild = (child = {}) => {
-  const {
-    key,
-    type,
-    ref: childRef,
-    props: childProps = {},
-  } = child;
-
-  return (
-    <MemoBaby key={key} ref={childRef} Comp={type} {...childProps} />
-  );
-};
-
-const renderChildren = children => recursiveMap(children, renderChild);
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
   const {
@@ -159,12 +143,6 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     onChangeChild(...list);
   });
 
-  const providerValue = useMemo(() => ({
-    getValue,
-    getErrorsWithMessage,
-    onChange,
-  }), [getValue, getErrorsWithMessage, onChange]);
-
   const submit = useEventCallback(() => {
     return new Promise((resolve, reject) => {
       const res = [];
@@ -200,10 +178,36 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
 
   useImperativeHandle(ref, () => ({ submit }), [submit]);
 
+  const providerValue = useMemo(() => ({
+    getValue,
+    getErrorsWithMessage,
+    onChange,
+  }), [getValue, getErrorsWithMessage, onChange]);
+
+  const renderChild = (child = {}) => {
+    const {
+      key,
+      type,
+      ref: childRef,
+      props: baseChildProps = {},
+    } = child;
+
+    const { _valueAttr = 'value' } = baseChildProps;
+
+    const childValue = getValue(baseChildProps);
+    const childProps = Object.assign({}, baseChildProps, {
+      [_valueAttr]: childValue,
+    });
+
+    return (
+      <MemoBaby key={key} ref={childRef} Comp={type} {...childProps} />
+    );
+  };
+
   return (
     <Provider value={providerValue}>
       <Container className={cls} {...others}>
-        { renderChildren(children) }
+        { recursiveMap(children, renderChild) }
       </Container>
     </Provider>
   );

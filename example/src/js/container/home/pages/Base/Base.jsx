@@ -31,7 +31,10 @@ class Base extends Component {
   formRef = createRef();
 
   state = {
-    value: {},
+    value: {
+      name: 'name',
+      password: 'password',
+    },
     errors: [],
   };
 
