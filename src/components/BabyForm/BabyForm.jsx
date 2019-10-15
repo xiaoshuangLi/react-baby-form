@@ -26,6 +26,7 @@ const Baby = React.forwardRef((props = {}, ref) => {
     _valueAttr = 'value',
     _triggerAttr = 'onChange',
     _error = false,
+    ...others
   } = props;
 
   const value = props[_valueAttr];
@@ -43,7 +44,7 @@ const Baby = React.forwardRef((props = {}, ref) => {
   });
 
   const initProps = _error ? { errors } : {};
-  const staticProps = Object.assign(initProps, props);
+  const staticProps = Object.assign(initProps, others);
   const baseProps = getNeatProps(staticProps);
 
   const restProps = Object.assign({}, baseProps, {
