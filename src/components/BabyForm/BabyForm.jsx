@@ -177,7 +177,16 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     });
   });
 
-  useImperativeHandle(ref, () => ({ submit }), [submit]);
+  useImperativeHandle(ref, () => {
+    const { current } = ref;
+
+    if (current) {
+      current.submit = submit;
+      return current;
+    }
+
+    return { submit };
+  }, [submit]);
 
   const providerValue = useMemo(() => ({
     getValue,
@@ -207,7 +216,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
 
   return (
     <Provider value={providerValue}>
-      <Container className={cls} {...others}>
+      <Container ref={ref} className={cls} {...others}>
         { recursiveMap(children, renderChild) }
       </Container>
     </Provider>
