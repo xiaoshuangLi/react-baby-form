@@ -35,9 +35,9 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
   const errors = parent.getErrorsWithMessage(props, value);
   const trigger = useEventCallback((...list) => {
-    const [e = {}] = list;
+    const [e] = list;
 
-    e.stopPropagation && e.stopPropagation();
+    e && e.stopPropagation && e.stopPropagation();
     baseTrigger && baseTrigger(...list);
 
     parent.onChange(props, ...list);
