@@ -224,8 +224,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       const { current = [] } = babiesRef;
 
       const promises = current.map((item) => {
+        const { current: { submit: itemSubmit } } = item;
+
         return new Promise((itemReslove) => {
-          submit(item)
+          itemSubmit()
             .then(() => itemReslove([]))
             .catch(itemReslove);
         });
