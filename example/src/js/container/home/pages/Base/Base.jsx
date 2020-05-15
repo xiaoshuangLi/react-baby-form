@@ -50,9 +50,13 @@ class Base extends Component {
 
   onClickSubmit = () => {
     const fn = errors => this.setState({ errors });
+    const then = (res) => {
+      fn([]);
+      console.log(res);
+    };
 
     submit(this.formRef)
-      .then(console.log)
+      .then(then)
       .catch(fn);
   }
 

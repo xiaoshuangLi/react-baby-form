@@ -1,7 +1,10 @@
 import React, {
+  useRef,
   useMemo,
+  useEffect,
   useContext,
   useImperativeHandle,
+  createRef,
 } from 'react';
 import classnames from 'classnames';
 
@@ -12,6 +15,7 @@ import {
   getNeatProps,
   recursiveMap,
   recursiveForeach,
+  mergeArray,
   getValueFromEvent,
   getCurrentFromRef,
 } from './utils';
@@ -19,6 +23,9 @@ import {
 import { ParentContext, useEventCallback } from './hooks';
 
 const { Provider } = ParentContext;
+
+const KEY = Symbol('Baby');
+const EMPTY_FN = () => {};
 
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
@@ -29,18 +36,28 @@ const Baby = React.forwardRef((props = {}, ref) => {
     ...others
   } = props;
 
+  ref = useMemo(() => {
+    return ref || createRef();
+  }, [ref]);
+
   const value = props[_valueAttr];
   const baseTrigger = props[_triggerAttr];
   const parent = useContext(ParentContext) || {};
 
-  const errors = parent.getErrorsWithMessage(props, value);
+  const {
+    subscribe,
+    getErrorsWithMessage,
+    onChange,
+  } = parent;
+
+  const errors = getErrorsWithMessage(props, value);
   const trigger = useEventCallback((...list) => {
     const [e] = list;
 
     e && e.stopPropagation && e.stopPropagation();
     baseTrigger && baseTrigger(...list);
 
-    parent.onChange(props, ...list);
+    onChange(props, ...list);
   });
 
   const initProps = _error ? { errors } : {};
@@ -50,6 +67,8 @@ const Baby = React.forwardRef((props = {}, ref) => {
   const restProps = Object.assign({}, baseProps, {
     [_triggerAttr]: trigger,
   });
+
+  useEffect(() => subscribe(ref), [ref]);
 
   return (
     <Comp ref={ref} {...restProps} />
@@ -75,6 +94,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     'components-baby-form-render': true,
     [className]: !!className,
   });
+
+  const babiesRef = useRef([]);
 
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
@@ -144,9 +165,32 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     onChangeChild(...list);
   });
 
+  const subscribe = useEventCallback((baby = {}) => {
+    const { current: babies = [] } = babiesRef;
+    const { current } = baby;
+
+    if (!current) {
+      return EMPTY_FN;
+    }
+
+    if (!current[KEY]) {
+      return EMPTY_FN;
+    }
+
+    babiesRef.current = babies.concat(baby);
+
+    return () => {
+      const { current: prevBabies = [] } = babiesRef;
+
+      babiesRef.current = prevBabies.filter(
+        item => item !== baby
+      );
+    };
+  });
+
   const submit = useEventCallback(() => {
-    return new Promise((resolve, reject) => {
-      const res = [];
+    const getChildrenErrors = () => {
+      const errors = [];
 
       recursiveForeach(children, (child = {}) => {
         const { props: childProps = {} } = child;
@@ -170,29 +214,55 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
           errors: childErrors,
         };
 
-        res.push(obj);
+        errors.push(obj);
       });
 
-      res.length ? reject(res) : resolve(propsValue);
+      return errors;
+    };
+
+    const getBabiesErrors = () => {
+      const { current = [] } = babiesRef;
+
+      const promises = current.map((item) => {
+        return new Promise((itemReslove) => {
+          submit(item)
+            .then(() => itemReslove([]))
+            .catch(itemReslove);
+        });
+      });
+
+      return Promise.all(promises).then(mergeArray);
+    };
+
+    return new Promise((resolve, reject) => {
+      const promises = [
+        getChildrenErrors(),
+        getBabiesErrors(),
+      ];
+
+      Promise.all(promises)
+        .then(mergeArray)
+        .then((errors = []) => {
+          errors.length ? reject(errors) : resolve(propsValue);
+        });
     });
   });
 
   useImperativeHandle(ref, () => {
     const { current } = ref;
+    const obj = { submit, [KEY]: true };
 
-    if (current) {
-      current.submit = submit;
-      return current;
-    }
-
-    return { submit };
+    return current
+      ? Object.assign(current, obj)
+      : obj;
   }, [submit]);
 
   const providerValue = useMemo(() => ({
+    subscribe,
     getValue,
     getErrorsWithMessage,
     onChange,
-  }), [getValue, getErrorsWithMessage, onChange]);
+  }), [subscribe, getValue, getErrorsWithMessage, onChange]);
 
   const renderChild = (child = {}) => {
     const {
