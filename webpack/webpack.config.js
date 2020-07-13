@@ -1,5 +1,5 @@
 var path = require('path');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+var { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var projectFolder = path.resolve(__dirname, '../');
 var outputPath = path.resolve(projectFolder, '../lib');
