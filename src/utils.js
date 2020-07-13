@@ -133,7 +133,7 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
 
 export const mergeArray = (list = []) => list.reduce(
   (res = [], item = []) => [...res, ...item],
-  []
+  [],
 );
 
 export function getValueFromEvent(event) {

@@ -50,8 +50,8 @@ const defaultWarning = {
   },
 };
 
-const warn = (baseWarning = {}) => {
-  const warning = Object.assign({}, defaultWarning, baseWarning);
+const warn = (warning = {}) => {
+  warning = { ...defaultWarning, ...warning };
 
   return (value, error = {}, opts = {}) => {
     const { key, condition } = error;

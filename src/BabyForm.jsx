@@ -20,7 +20,11 @@ import {
   getCurrentFromRef,
 } from './utils';
 
-import { ParentContext, useEventCallback } from './hooks';
+import {
+  ParentContext,
+  useEventCallback,
+  useDebounceCallback,
+} from './hooks';
 
 const { Provider } = ParentContext;
 
@@ -29,7 +33,7 @@ const EMPTY_FN = () => {};
 
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
-    Comp,
+    ComponentClasss,
     _valueAttr = 'value',
     _triggerAttr = 'onChange',
     _error = false,
@@ -64,14 +68,18 @@ const Baby = React.forwardRef((props = {}, ref) => {
   const staticProps = Object.assign(initProps, others);
   const baseProps = getNeatProps(staticProps);
 
-  const restProps = Object.assign({}, baseProps, {
+  const restProps = {
+    ...baseProps,
     [_triggerAttr]: trigger,
-  });
+  };
 
-  useEffect(() => subscribe(ref), [ref]);
+  useEffect(
+    () => subscribe(ref),
+    [subscribe, ref],
+  );
 
   return (
-    <Comp ref={ref} {...restProps} />
+    <ComponentClasss ref={ref} {...restProps} />
   );
 });
 
@@ -101,7 +109,9 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     const { _name = '' } = childProps;
 
     if (Array.isArray(_name)) {
-      return _name.map(item => propsValue[item]);
+      return _name.map(
+        (item) => propsValue[item],
+      );
     }
 
     return propsValue[_name];
@@ -119,76 +129,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     return errors.map((error = {}) => {
       const message = warnFn(childValue, error, childProps);
 
-      return Object.assign({}, error, { message });
+      return { ...error, message };
     });
-  });
-
-  const onErrorChild = useEventCallback((childProps = {}, e) => {
-    const { _name } = childProps;
-    const childValue = getValueFromEvent(e);
-
-    const errors = getErrorsWithMessage(childProps, e);
-    const { length } = errors;
-
-    if (!length) {
-      return;
-    }
-
-    const obj = {
-      errors,
-      key: _name,
-      value: childValue,
-    };
-
-    propsOnError && propsOnError(obj);
-  });
-
-  const onChangeChild = useEventCallback((childProps = {}, e) => {
-    const { _name } = childProps;
-    const childValue = getValueFromEvent(e);
-
-    let obj;
-
-    if (Array.isArray(_name)) {
-      obj = _name.reduce((a, key, index) => {
-        return Object.assign({}, a, { [key]: childValue[index] });
-      }, {});
-    } else {
-      obj = { [_name]: childValue };
-    }
-
-    const baseValue = Array.isArray(propsValue) ? [] : {};
-    const value = Object.assign(baseValue, propsValue, obj);
-
-    propsOnChange && propsOnChange(value);
-  });
-
-  const onChange = useEventCallback((...list) => {
-    onErrorChild(...list);
-    onChangeChild(...list);
-  });
-
-  const subscribe = useEventCallback((baby = {}) => {
-    const { current: babies = [] } = babiesRef;
-    const { current } = baby;
-
-    if (!current) {
-      return EMPTY_FN;
-    }
-
-    if (!current[KEY]) {
-      return EMPTY_FN;
-    }
-
-    babiesRef.current = babies.concat(baby);
-
-    return () => {
-      const { current: prevBabies = [] } = babiesRef;
-
-      babiesRef.current = prevBabies.filter(
-        item => item !== baby
-      );
-    };
   });
 
   const submit = useEventCallback(() => {
@@ -253,14 +195,58 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     });
   });
 
-  useImperativeHandle(ref, () => {
-    const { current } = ref;
-    const obj = { submit, [KEY]: true };
+  const onChange = useEventCallback((childProps = {}, e) => {
+    const { _name } = childProps;
+    const childValue = getValueFromEvent(e);
 
-    return current
-      ? Object.assign(current, obj)
-      : obj;
-  }, [submit]);
+    let obj;
+
+    if (Array.isArray(_name)) {
+      obj = _name.reduce((a, key, index) => {
+        return { ...a, [key]: childValue[index] };
+      }, {});
+    } else {
+      obj = { [_name]: childValue };
+    }
+
+    const baseValue = Array.isArray(propsValue) ? [] : {};
+    const value = Object.assign(baseValue, propsValue, obj);
+
+    propsOnChange && propsOnChange(value);
+  });
+
+  const onError = useDebounceCallback(() => {
+    submit()
+      .then(() => {
+        propsOnError && propsOnError();
+      })
+      .catch((errors) => {
+        propsOnError && propsOnError(errors);
+      });
+  }, 1000);
+
+  const subscribe = useEventCallback((baby = {}) => {
+    const { current: babies = [] } = babiesRef;
+    const { current } = baby;
+
+    if (!current) {
+      return EMPTY_FN;
+    }
+
+    if (!current[KEY]) {
+      return EMPTY_FN;
+    }
+
+    babiesRef.current = babies.concat(baby);
+
+    return () => {
+      const { current: prevBabies = [] } = babiesRef;
+
+      babiesRef.current = prevBabies.filter(
+        (item) => item !== baby,
+      );
+    };
+  });
 
   const providerValue = useMemo(() => ({
     subscribe,
@@ -268,6 +254,17 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     getErrorsWithMessage,
     onChange,
   }), [subscribe, getValue, getErrorsWithMessage, onChange]);
+
+  useEffect(onError);
+
+  useImperativeHandle(ref, () => {
+    const { current } = ref;
+    const obj = { submit, [KEY]: true };
+
+    return current
+      ? Object.assign(current, obj)
+      : obj;
+  }, [submit, ref]);
 
   const renderChild = (child = {}) => {
     const {
@@ -280,12 +277,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     const { _valueAttr = 'value' } = baseChildProps;
 
     const childValue = getValue(baseChildProps);
-    const childProps = Object.assign({}, baseChildProps, {
-      [_valueAttr]: childValue,
-    });
+    const childProps = { ...baseChildProps, [_valueAttr]: childValue };
 
     return (
-      <MemoBaby key={key} ref={childRef} Comp={type} {...childProps} />
+      <MemoBaby key={key} ref={childRef} ComponentClasss={type} {...childProps} />
     );
   };
 
@@ -327,4 +322,4 @@ export const submit = (ref) => {
   return current.submit();
 };
 
-export default React.memo(BabyForm);
+export default BabyForm;
