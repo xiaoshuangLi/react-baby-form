@@ -43,6 +43,7 @@ const childPropsKeys = [
   '_required',
   '_pattern',
   '_fn',
+  '_warning',
 ];
 
 export const getNeatProps = (props = {}) => {

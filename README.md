@@ -178,6 +178,7 @@ Validate BabyForm and return ```Promise```. Just like this:
   _min: undefined, // PropTypes.number
   _required: undefined, // PropTypes.bool
   _pattern: undefined, // RegExp
-  _fn: undefined // PropTypes.function, value => PropTypes.bool, validate it anyway you like
+  _fn: undefined, // PropTypes.function, value => PropTypes.bool, validate it anyway you like
+  _warning: undefined, // PropTypes.object, just like warning, custom error message
 }
 ```

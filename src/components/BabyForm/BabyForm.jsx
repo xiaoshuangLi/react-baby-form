@@ -108,9 +108,12 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   });
 
   const getErrorsWithMessage = useEventCallback((childProps = {}, e) => {
-    const childValue = getValueFromEvent(e);
-    const warnFn = warn(warning);
+    const { _warning: childWarning = {} } = childProps;
 
+    const mergedWarning = { ...warning, ...childWarning };
+    const warnFn = warn(mergedWarning);
+
+    const childValue = getValueFromEvent(e);
     const errors = check(childValue, childProps);
 
     return errors.map((error = {}) => {
