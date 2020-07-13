@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx"] }
+    ],
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "react/no-array-index-key": "off",
+    "react/no-find-dom-node": "off",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-param-reassign": "off",
+    "consistent-return": "off",
+    "no-unused-expressions": "off",
+    "arrow-body-style": "off",
+    "max-len": "off",
+    "no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "caughtErrors": "none",
+        "ignoreRestSiblings": true
+      }
+    ]
+  },
+  "plugins": [
+    "babel"
+  ]
+}

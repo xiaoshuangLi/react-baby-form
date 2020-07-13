@@ -1,8 +1,8 @@
 {
   "plugins":
   {
+    "postcss-import": {},
     "postcss-preset-env": {},
-    "postcss-write-svg": {},
-    "postcss-reporter": {}
+    "cssnano": {},
   }
 }

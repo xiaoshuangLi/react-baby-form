@@ -1,5 +1,4 @@
 var config = require('./webpack.config.js');
-var Visualizer = require('webpack-visualizer-plugin');
 
 var startOrEndWithList = [
   'react',
@@ -37,10 +36,5 @@ config.externals = config.externals || [];
 config.externals = config.externals.concat(externals);
 
 config.plugins = config.plugins || [];
-config.plugins.push(
-  new Visualizer({
-    filename: '../lib/pie.html',
-  })
-);
 
 module.exports = config;
