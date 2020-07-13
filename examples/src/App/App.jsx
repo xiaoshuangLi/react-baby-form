@@ -20,7 +20,7 @@ const Item = (props = {}) => {
   });
 
   return (
-    <div className={cls}>
+    <div className={cls} {...others}>
       <div className="item-title">{ title }</div>
       <div className="item-children">{ children }</div>
     </div>
@@ -28,28 +28,30 @@ const Item = (props = {}) => {
 };
 
 class Base extends Component {
-  formRef = createRef();
+  constructor(props) {
+    super(props);
 
-  state = {
-    value: {
-      name: 'name',
-      password: 'password',
-    },
-    errors: [],
-  };
+    this.formRef = createRef();
+
+    this.state = {
+      value: {
+        name: 'name',
+        password: 'password',
+      },
+      errors: [],
+    };
+  }
 
   onChangeForm = (value) => {
     this.setState({ value });
   }
 
-  onErrorForm = (error = []) => {
-    const errors = [error];
-
+  onErrorForm = (errors = []) => {
     this.setState({ errors });
   }
 
   onClickSubmit = () => {
-    const fn = errors => this.setState({ errors });
+    const fn = (errors) => this.setState({ errors });
     const then = (res) => {
       fn([]);
       console.log(res);
@@ -64,7 +66,7 @@ class Base extends Component {
     const { value = {} } = this.state;
     const { password } = value;
 
-    const fn = repeatedPassword => password === repeatedPassword;
+    const fn = (repeatedPassword) => password === repeatedPassword;
 
     return (
       <div className="base-form">
@@ -77,7 +79,7 @@ class Base extends Component {
             _required
             _maxLength={32}
             _pattern={/^[0-9a-zA-Z]*$/g}
-            />
+          />
         </Item>
         <Item className="form-item" title="password">
           <input
@@ -87,7 +89,7 @@ class Base extends Component {
             _title="Password"
             _minLength={6}
             _maxLength={16}
-            />
+          />
         </Item>
         <Item className="form-item" title="password again">
           <input
@@ -96,7 +98,7 @@ class Base extends Component {
             _name="repeatedPassword"
             _title="Repeated password"
             _fn={fn}
-            />
+          />
         </Item>
       </div>
     );
@@ -120,7 +122,7 @@ class Base extends Component {
 
       return (
         <div className="messasge-part" key={index}>
-          { message } 
+          { message }
         </div>
       );
     });
@@ -130,7 +132,11 @@ class Base extends Component {
 
       return (
         <div className="errors-item" key={index}>
-          <div className="item-title">{key} - {value}</div>
+          <div className="item-title">
+            { key }
+            -
+            { value }
+          </div>
           <div className="item-message">
             { renderMessage(errors) }
           </div>
@@ -159,7 +165,9 @@ class Base extends Component {
         value={value}
         className={cls}
         ref={this.formRef}
-        onChange={this.onChangeForm}>
+        onError={this.onErrorForm}
+        onChange={this.onChangeForm}
+      >
         { this.renderForm() }
         { this.renderButton() }
         { this.renderErrors() }

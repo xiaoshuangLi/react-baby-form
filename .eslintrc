@@ -23,6 +23,7 @@
     "no-param-reassign": "off",
     "consistent-return": "off",
     "no-unused-expressions": "off",
+    "no-underscore-dangle": "off",
     "arrow-body-style": "off",
     "max-len": "off",
     "no-unused-vars": [

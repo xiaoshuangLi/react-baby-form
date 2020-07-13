@@ -90,7 +90,7 @@ class Base extends Components {
   warning: {}, // PropTypes.Object, warning message from BabyForm
   Container: 'div', // PropTypes.element, The container for render.
   onChange: () => value. // PropTypes.func, Trigger when value change.
-  onError: () => error. // PropTypes.func, Trigger when some children value don't pass, only return one error.
+  onError: () => errors. // PropTypes.func, Trigger when render, return all errors or [].
 }
 ```
 
