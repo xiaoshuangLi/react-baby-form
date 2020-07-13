@@ -1,4 +1,4 @@
-var config = require('./webpack.config.js');  sss
+var config = require('./webpack.config.js');
 
 const startOrEndWithList = [
   'classnames',
