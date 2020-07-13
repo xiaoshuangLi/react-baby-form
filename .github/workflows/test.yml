@@ -46,6 +46,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Restore cache from node_modules
+      uses: actions/cache@v2
+      with: 
+        path: node_modules
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
     - run: npm run build --if-present
 
   test:
@@ -57,5 +63,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Restore cache from node_modules
+      uses: actions/cache@v2
+      with: 
+        path: node_modules
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - run: npm run test
