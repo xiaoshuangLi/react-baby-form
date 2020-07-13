@@ -43,6 +43,7 @@ jobs:
       matrix:
         node-version: [14.x]
 
+    steps:
     - run: npm run build --if-present
 
   test:
@@ -52,4 +53,5 @@ jobs:
       matrix:
         node-version: [14.x]
 
+    steps:
     - run: npm run test
