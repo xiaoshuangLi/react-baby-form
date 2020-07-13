@@ -95,15 +95,15 @@ test('set correct value from complex data structure', () => {
   const { root } = testRenderer;
 
   const nameWithCorrectValue = root.find((curr = {}) => {
-    const { props: { id, value } = {} } = curr;
+    const { props: { id, value, ComponentClasss } = {} } = curr;
 
-    return id === 'name' && value === 'xiaoshuang';
+    return id === 'name' && value === 'xiaoshuang' && !ComponentClasss;
   });
 
   const ageWithCorrectValue = root.find((curr = {}) => {
-    const { props: { id, value } = {} } = curr;
+    const { props: { id, value, ComponentClasss } = {} } = curr;
 
-    return id === 'age' && value === '28';
+    return id === 'age' && value === '28' && !ComponentClasss;
   });
 
   const correct = !!(nameWithCorrectValue && ageWithCorrectValue);
