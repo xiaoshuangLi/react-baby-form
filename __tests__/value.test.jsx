@@ -13,7 +13,7 @@ test('set correct value by _name', () => {
     <BabyForm value={value}>
       <input id="name" type="text" _name="name" _required />
       <input id="age" type="text" _name="age" />
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;
@@ -49,7 +49,7 @@ test('set correct value by _name in child BabyForm', () => {
       <BabyForm _name="baby">
         <input id="name" type="text" _name="name" _required />
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;
@@ -89,7 +89,7 @@ test('set correct value from complex data structure', () => {
           <input id="name" type="text" _name="name" _required />
         </BabyForm>
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;

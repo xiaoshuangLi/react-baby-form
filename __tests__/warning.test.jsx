@@ -75,7 +75,7 @@ const objToKey = (obj = {}, parentKeys = []) => {
   }
 
   const keys = Object.keys(obj).sort(
-    (a, b) => a > b ? 1 : -1,
+    (a, b) => a > b ? 1 : -1
   );
 
   return keys.reduce((res = '', key) => {
@@ -107,7 +107,7 @@ test('custom warning', (done) => {
   const testRenderer = renderer.create(
     <BabyForm value={value} onError={onError} warning={warning}>
       <input type="text" _name="name" _required />
-    </BabyForm>,
+    </BabyForm>
   );
 });
 
@@ -129,7 +129,7 @@ test('custom child warning', (done) => {
   const testRenderer = renderer.create(
     <BabyForm value={value} onError={onError}>
       <input type="text" _name="name" _required _warning={warning} />
-    </BabyForm>,
+    </BabyForm>
   );
 });
 
@@ -153,6 +153,6 @@ test('custom child warning in child BabyForm', (done) => {
       <BabyForm _name="baby">
         <input type="text" _name="name" _required _warning={warning} />
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 });

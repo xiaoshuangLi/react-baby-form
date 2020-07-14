@@ -25,7 +25,7 @@ test('trigger onChange when child change', (done) => {
   const testRenderer = renderer.create(
     <BabyForm value={value} onChange={onChange}>
       <input id="name" type="text" _name="name" _required />
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;
@@ -65,7 +65,7 @@ test('trigger onChange from child BabyForm', (done) => {
       <BabyForm _name="baby">
         <input id="name" type="text" _name="name" _required />
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;
@@ -109,7 +109,7 @@ test('trigger onChange from complex data structure', (done) => {
           <input id="name" type="text" _name="name" _required />
         </BabyForm>
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 
   const { root } = testRenderer;

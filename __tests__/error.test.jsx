@@ -24,7 +24,7 @@ const objToKey = (obj = {}, parentKeys = []) => {
   }
 
   const keys = Object.keys(obj).sort(
-    (a, b) => a > b ? 1 : -1,
+    (a, b) => a > b ? 1 : -1
   );
 
   return keys.reduce((res = '', key) => {
@@ -56,7 +56,7 @@ test('trigger onError when did mount', (done) => {
   const testRenderer = renderer.create(
     <BabyForm value={value} onError={onError}>
       <input type="text" _name="name" _required />
-    </BabyForm>,
+    </BabyForm>
   );
 });
 
@@ -80,7 +80,7 @@ test('trigger onError by child BabyForm when did mount', (done) => {
       <BabyForm _name="baby">
         <input type="text" _name="name" _required />
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 });
 
@@ -102,7 +102,7 @@ test('trigger onError when did update', (done) => {
   const testRenderer = renderer.create(
     <BabyForm value={value}>
       <input type="text" _name="name" _required />
-    </BabyForm>,
+    </BabyForm>
   );
 
   testRenderer.update(
@@ -132,7 +132,7 @@ test('trigger onError by child BabyForm when did update', (done) => {
       <BabyForm _name="baby">
         <input type="text" _name="name" _required />
       </BabyForm>
-    </BabyForm>,
+    </BabyForm>
   );
 
   testRenderer.update(
