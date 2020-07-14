@@ -1,4 +1,5 @@
-var config = require('./webpack.config.js');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const config = require('./webpack.config.js');
 
 const startOrEndWithList = [
   'classnames',
@@ -29,5 +30,9 @@ config.externals = config.externals || [];
 config.externals = config.externals.concat(externals);
 
 config.plugins = config.plugins || [];
+// config.plugins = config.plugins.concat(new BundleAnalyzerPlugin({
+//   analyzerMode: 'static',
+//   generateStatsFile: true,
+// }));
 
 module.exports = config;
