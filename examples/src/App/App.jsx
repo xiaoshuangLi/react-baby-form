@@ -34,8 +34,8 @@ class Base extends Component {
 
     this.state = {
       value: {
-        name: 'name',
-        password: 'password',
+        name: 'Tyler Durden',
+        password: '123456',
       },
       errors: [],
     };
@@ -54,6 +54,7 @@ class Base extends Component {
     const then = (res) => {
       fn([]);
       console.log(res);
+      alert('Submit success. Check value in console.');
     };
 
     submit(this.formRef)
@@ -77,7 +78,7 @@ class Base extends Component {
             _title="Name"
             _required
             _maxLength={32}
-            _pattern={/^[0-9a-zA-Z]*$/g}
+            _pattern={/^[0-9a-zA-Z\s]*$/g}
           />
         </Item>
         <Item className="form-item" title="password">
@@ -127,13 +128,13 @@ class Base extends Component {
     });
 
     const items = stateErrors.map((item = {}, index) => {
-      const { value, key, errors = [] } = item;
+      const { key, value, errors = [] } = item;
 
       return (
         <div className="errors-item" key={index}>
           <div className="item-title">
             { key }
-            -
+            &nbsp;-&nbsp;
             { value }
           </div>
           <div className="item-message">

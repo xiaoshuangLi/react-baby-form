@@ -46,20 +46,38 @@ $black4: #ccc;
   .base-item {
     &.base-required {
       .item-title {
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+
         &:before {
-          content: '*';
-          color: $red;
-          padding-right: 5px;
+          content: '';
+          display: inline-block;
+          margin-right: 5px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: $red;
         }
       }
     }
 
     & + .base-item {
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
-    .item-title {
+    > * {
+      & + * {
+        margin-top: 5px;
+      }
+    }
+    
 
+    .item-title {
+      color: $black2;
+      font-size: 12px;
+      padding: 0 8px;
+      text-transform: uppercase;
     }
 
     .item-children {
@@ -71,10 +89,13 @@ $black4: #ccc;
 @mixin baseForm {
   .base-form {
     .item-input {
-      padding: 5px 0;
+      padding: 6px 8px;
       width: 100%;
+      color: $black;
+      font-size: 12px;
       border: none;
-      border-bottom: 1px solid $black3;
+      border-radius: 5px;
+      background: rgba($blue, .1);
     }
 
     & + * {
@@ -107,6 +128,8 @@ $black4: #ccc;
     left: 0;
     top: calc(100% + 10px);
     color: $red;
+    font-size: 12px;
+    border-radius: 10px;
     background: lighten($red, 25);
 
     &:empty {
@@ -136,14 +159,20 @@ $black4: #ccc;
 }
 
 * {
+  outline: none;
   box-sizing: border-box;
+}
+
+body {
+  background: $grey;
 }
 
 .pages-home-base-render {
   width: 300px;
-  padding: 10px 15px;
+  padding: 15px;
+  border-radius: 10px;
   background-color: white;
-  border: 1px solid $black4;
+  box-shadow: 0 3px 10px rgba(black, .05);
 
   @extend %percenter;
 
