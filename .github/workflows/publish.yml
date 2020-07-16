@@ -1,4 +1,4 @@
-name: test
+name: publish
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       if: steps.cache-node_modules.outputs.cache-hit != 'true'
       run: npm ci
 
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     strategy:
@@ -43,23 +43,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Restore cache from node_modules
-      uses: actions/cache@v2
-      with: 
-        path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
-
-    - run: npm run build --if-present
-
-  test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org/
 
     - name: Restore cache from node_modules
       uses: actions/cache@v2
@@ -67,4 +54,15 @@ jobs:
         path: node_modules
         key: node_modules-${{ hashFiles('package-lock.json') }}
 
-    - run: npm run test
+    - name: Cache package version
+      uses: actions/cache@v2
+      id: cache-package-version
+      with: 
+        path: package.json
+        key: package-version-${{ hashFiles('package.json') }}
+
+    - name: Publish
+      if: steps.cache-package-version.outputs.cache-hit != 'true'
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
