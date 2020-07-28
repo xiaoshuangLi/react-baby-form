@@ -27,7 +27,7 @@ jobs:
       id: cache-node_modules
       with: 
         path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install
       if: steps.cache-node_modules.outputs.cache-hit != 'true'
@@ -52,14 +52,14 @@ jobs:
       uses: actions/cache@v2
       with: 
         path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - name: Cache package version
       uses: actions/cache@v2
       id: cache-package-version
       with: 
         path: package.json
-        key: package-version-${{ hashFiles('package.json') }}
+        key: package-version-${{ hashFiles('**/package.json') }}
 
     - name: Publish
       if: steps.cache-package-version.outputs.cache-hit != 'true'

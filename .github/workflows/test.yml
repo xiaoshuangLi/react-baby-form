@@ -27,7 +27,7 @@ jobs:
       id: cache-node_modules
       with: 
         path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install
       if: steps.cache-node_modules.outputs.cache-hit != 'true'
@@ -47,7 +47,7 @@ jobs:
       uses: actions/cache@v2
       with: 
         path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - run: npm run build --if-present
 
@@ -65,6 +65,6 @@ jobs:
       uses: actions/cache@v2
       with: 
         path: node_modules
-        key: node_modules-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
     - run: npm run test
