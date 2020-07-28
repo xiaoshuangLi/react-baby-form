@@ -1,4 +1,4 @@
-const runBy = cb => (value, condition) => {
+const runBy = (cb) => (value, condition) => {
   if (condition === undefined) {
     return true;
   }
@@ -33,7 +33,7 @@ const runObj = {
 
 const _continued = (value, opts) => {
   const { required, _required } = opts;
-  const included = useless.includes(value)
+  const included = useless.includes(value);
 
   if (required || _required) {
     return true;
@@ -44,7 +44,7 @@ const _continued = (value, opts) => {
   }
 
   return false;
-}
+};
 
 const check = (value, opts = {}) => {
   const keys = Object.keys(runObj);

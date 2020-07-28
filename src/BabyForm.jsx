@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useContext,
   useImperativeHandle,
-  createRef,
 } from 'react';
 import classnames from 'classnames';
 
@@ -22,16 +21,18 @@ import {
 
 import {
   ParentContext,
+  useStableRef,
   useEventCallback,
   useDebounceCallback,
 } from './hooks';
 
 const { Provider } = ParentContext;
 
-const KEY = Symbol('Baby');
 const EMPTY_FN = () => {};
 
 const Baby = React.forwardRef((props = {}, ref) => {
+  ref = useStableRef(ref);
+
   const {
     ComponentClasss,
     _valueAttr = 'value',
@@ -40,16 +41,11 @@ const Baby = React.forwardRef((props = {}, ref) => {
     ...others
   } = props;
 
-  ref = useMemo(() => {
-    return ref || createRef();
-  }, [ref]);
-
   const value = props[_valueAttr];
   const baseTrigger = props[_triggerAttr];
   const parent = useContext(ParentContext) || {};
 
   const {
-    subscribe,
     getErrorsWithMessage,
     onChange,
   } = parent;
@@ -73,11 +69,6 @@ const Baby = React.forwardRef((props = {}, ref) => {
     [_triggerAttr]: trigger,
   };
 
-  useEffect(
-    () => subscribe(ref),
-    [subscribe, ref],
-  );
-
   return (
     <ComponentClasss ref={ref} {...restProps} />
   );
@@ -86,6 +77,8 @@ const Baby = React.forwardRef((props = {}, ref) => {
 const MemoBaby = React.memo(Baby);
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
+  ref = useStableRef(ref);
+
   const {
     className,
     Container,
@@ -104,6 +97,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   });
 
   const babiesRef = useRef([]);
+  const parent = useContext(ParentContext) || {};
+  const { subscribe: parentSubscribe } = parent;
 
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
@@ -233,10 +228,6 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       return EMPTY_FN;
     }
 
-    if (!current[KEY]) {
-      return EMPTY_FN;
-    }
-
     babiesRef.current = babies.concat(baby);
 
     return () => {
@@ -257,9 +248,13 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
 
   useEffect(onError);
 
+  useEffect(() => {
+    return parentSubscribe ? parentSubscribe(ref) : undefined;
+  }, [parentSubscribe, ref]);
+
   useImperativeHandle(ref, () => {
     const { current } = ref;
-    const obj = { submit, [KEY]: true };
+    const obj = { submit };
 
     return current
       ? Object.assign(current, obj)

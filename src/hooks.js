@@ -1,7 +1,9 @@
 import {
   useRef,
+  useMemo,
   useEffect,
   useCallback,
+  createRef,
   createContext,
 } from 'react';
 import debounce from 'lodash/debounce';
@@ -10,6 +12,12 @@ import throttle from 'lodash/throttle';
 export const ParentContext = createContext({
   onChange: () => {},
 });
+
+export const useStableRef = (ref) => {
+  return useMemo(() => {
+    return ref || createRef(null);
+  }, [ref]);
+};
 
 export const useEventCallback = (fn) => {
   const ref = useRef(fn);
