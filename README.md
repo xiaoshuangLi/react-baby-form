@@ -4,7 +4,7 @@ Easy form for react to use.
 
 [Demo](https://codesandbox.io/s/react-baby-form-demo-p7lvh)
 
-[react-antd-form Demo](https://codepen.io/xiaoshuang/pen/KboGxo), Base on Antd-Design.
+[react-antd-form Demo](https://codesandbox.io/s/react-antd-form-7xfp6), Base on Antd-Design.
 
 ## Installation
 
