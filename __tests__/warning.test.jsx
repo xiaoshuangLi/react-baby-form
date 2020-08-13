@@ -1,7 +1,8 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 
 import BabyForm from '../src';
+
+import { create } from './utils';
 
 const getTitleFromOpts = (opts = {}) => {
   const {
@@ -104,7 +105,7 @@ test('custom warning', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onError={onError} warning={warning}>
       <input type="text" _name="name" _required />
     </BabyForm>
@@ -126,7 +127,7 @@ test('custom child warning', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onError={onError}>
       <input type="text" _name="name" _required _warning={warning} />
     </BabyForm>
@@ -148,7 +149,7 @@ test('custom child warning in child BabyForm', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onError={onError}>
       <BabyForm _name="baby">
         <input type="text" _name="name" _required _warning={warning} />

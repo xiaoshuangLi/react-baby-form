@@ -2,6 +2,7 @@ import React, {
   useRef,
   useMemo,
   useEffect,
+  useLayoutEffect,
   useContext,
   useImperativeHandle,
 } from 'react';
@@ -164,7 +165,11 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       const { current = [] } = babiesRef;
 
       const promises = current.map((item) => {
-        const { current: { submit: itemSubmit } } = item;
+        const {
+          current: {
+            submit: itemSubmit = () => Promise.relove(),
+          } = {},
+        } = item;
 
         return new Promise((itemReslove) => {
           itemSubmit()
@@ -246,11 +251,11 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     onChange,
   }), [subscribe, getValue, getErrorsWithMessage, onChange]);
 
-  useEffect(onError);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     return parentSubscribe ? parentSubscribe(ref) : undefined;
   }, [parentSubscribe, ref]);
+
+  useEffect(onError);
 
   useImperativeHandle(ref, () => {
     const { current } = ref;

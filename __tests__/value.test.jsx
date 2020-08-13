@@ -1,7 +1,8 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 
 import BabyForm from '../src';
+
+import { create } from './utils';
 
 test('set correct value by _name', () => {
   const value = {
@@ -9,7 +10,7 @@ test('set correct value by _name', () => {
     age: '28',
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value}>
       <input id="name" type="text" _name="name" _required />
       <input id="age" type="text" _name="age" />
@@ -43,7 +44,7 @@ test('set correct value by _name in child BabyForm', () => {
     },
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value}>
       <input id="age" type="text" _name="age" />
       <BabyForm _name="baby">
@@ -81,7 +82,7 @@ test('set correct value from complex data structure', () => {
     },
   ];
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value}>
       <BabyForm _name={0}>
         <input id="age" type="text" _name="age" />

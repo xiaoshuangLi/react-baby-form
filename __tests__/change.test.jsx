@@ -1,7 +1,8 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 
 import BabyForm from '../src';
+
+import { create } from './utils';
 
 test('trigger onChange when child change', (done) => {
   const value = {};
@@ -22,7 +23,7 @@ test('trigger onChange when child change', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onChange={onChange}>
       <input id="name" type="text" _name="name" _required />
     </BabyForm>
@@ -60,7 +61,7 @@ test('trigger onChange from child BabyForm', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onChange={onChange}>
       <BabyForm _name="baby">
         <input id="name" type="text" _name="name" _required />
@@ -102,7 +103,7 @@ test('trigger onChange from complex data structure', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onChange={onChange}>
       <BabyForm _name={0}>
         <BabyForm _name="baby">

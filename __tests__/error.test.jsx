@@ -1,7 +1,8 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 
 import BabyForm from '../src';
+
+import { create } from './utils';
 
 const data = {
   value: {},
@@ -53,7 +54,7 @@ test('trigger onError when did mount', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onError={onError}>
       <input type="text" _name="name" _required />
     </BabyForm>
@@ -75,7 +76,7 @@ test('trigger onError by child BabyForm when did mount', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value} onError={onError}>
       <BabyForm _name="baby">
         <input type="text" _name="name" _required />
@@ -99,7 +100,7 @@ test('trigger onError when did update', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value}>
       <input type="text" _name="name" _required />
     </BabyForm>
@@ -127,7 +128,7 @@ test('trigger onError by child BabyForm when did update', (done) => {
     }
   };
 
-  const testRenderer = renderer.create(
+  const testRenderer = create(
     <BabyForm value={value}>
       <BabyForm _name="baby">
         <input type="text" _name="name" _required />
