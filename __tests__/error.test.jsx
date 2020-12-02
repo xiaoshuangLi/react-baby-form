@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import BabyForm from '../src';
 
@@ -139,6 +139,218 @@ test('trigger onError by child BabyForm when did update', (done) => {
   testRenderer.update(
     <BabyForm value={value} onError={onError}>
       <BabyForm _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment: trigger onError when did mount', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment: trigger onError by child BabyForm when did mount', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <BabyForm Container={Fragment} _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment: trigger onError when did update', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment: trigger onError by child BabyForm when did update', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value}>
+      <BabyForm Container={Fragment} _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <BabyForm Container={Fragment} _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): trigger onError when did mount', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): trigger onError by child BabyForm when did mount', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <BabyForm Container={null} _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): trigger onError when did update', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): trigger onError by child BabyForm when did update', (done) => {
+  const { value, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value}>
+      <BabyForm Container={null} _name="baby">
+        <input type="text" _name="name" _required />
+      </BabyForm>
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <BabyForm Container={null} _name="baby">
         <input type="text" _name="name" _required />
       </BabyForm>
     </BabyForm>

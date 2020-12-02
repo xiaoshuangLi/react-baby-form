@@ -5,6 +5,7 @@ import React, {
   useLayoutEffect,
   useContext,
   useImperativeHandle,
+  Fragment,
 } from 'react';
 import classnames from 'classnames';
 
@@ -22,18 +23,13 @@ import {
 
 import {
   ParentContext,
-  useStableRef,
   useEventCallback,
   useDebounceCallback,
 } from './hooks';
 
 const { Provider } = ParentContext;
 
-const EMPTY_FN = () => {};
-
 const Baby = React.forwardRef((props = {}, ref) => {
-  ref = useStableRef(ref);
-
   const {
     ComponentClasss,
     _valueAttr = 'value',
@@ -78,8 +74,6 @@ const Baby = React.forwardRef((props = {}, ref) => {
 const MemoBaby = React.memo(Baby);
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
-  ref = useStableRef(ref);
-
   const {
     className,
     Container,
@@ -164,18 +158,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     const getBabiesErrors = () => {
       const { current = [] } = babiesRef;
 
-      const promises = current.map((item) => {
-        const {
-          current: {
-            submit: itemSubmit = () => Promise.relove(),
-          } = {},
-        } = item;
-
-        return new Promise((itemReslove) => {
-          itemSubmit()
-            .then(() => itemReslove([]))
-            .catch(itemReslove);
-        });
+      const promises = current.map((baby) => {
+        return baby()
+          .then(() => [])
+          .catch((e) => e);
       });
 
       return Promise.all(promises).then(mergeArray);
@@ -225,13 +211,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       });
   }, 1000);
 
-  const subscribe = useEventCallback((baby = {}) => {
+  const subscribe = useEventCallback((baby) => {
     const { current: babies = [] } = babiesRef;
-    const { current } = baby;
-
-    if (!current) {
-      return EMPTY_FN;
-    }
 
     babiesRef.current = babies.concat(baby);
 
@@ -252,14 +233,19 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   }), [subscribe, getValue, getErrorsWithMessage, onChange]);
 
   useLayoutEffect(() => {
-    return parentSubscribe ? parentSubscribe(ref) : undefined;
-  }, [parentSubscribe, ref]);
+    return parentSubscribe ? parentSubscribe(submit) : undefined;
+  }, [parentSubscribe, submit]);
 
   useEffect(onError);
 
   useImperativeHandle(ref, () => {
-    const { current } = ref;
     const obj = { submit };
+
+    if (!ref) {
+      return obj;
+    }
+
+    const { current } = ref;
 
     return current
       ? Object.assign(current, obj)
@@ -284,11 +270,28 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     );
   };
 
-  return (
-    <Provider value={providerValue}>
+  const renderChildren = () => {
+    const fragment = !Container || Container === Fragment;
+    const content = recursiveMap(children, renderChild);
+
+    if (fragment) {
+      return (
+        <>
+          { content }
+        </>
+      );
+    }
+
+    return (
       <Container ref={ref} className={cls} {...others}>
         { recursiveMap(children, renderChild) }
       </Container>
+    );
+  };
+
+  return (
+    <Provider value={providerValue}>
+      { renderChildren() }
     </Provider>
   );
 });

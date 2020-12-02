@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import BabyForm from '../src';
 
@@ -152,6 +152,142 @@ test('custom child warning in child BabyForm', (done) => {
   const testRenderer = create(
     <BabyForm value={value} onError={onError}>
       <BabyForm _name="baby">
+        <input type="text" _name="name" _required _warning={warning} />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment: custom warning', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value} onError={onError} warning={warning}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment: custom child warning', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <input type="text" _name="name" _required _warning={warning} />
+    </BabyForm>
+  );
+});
+
+test('Fragment: custom child warning in child BabyForm', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value} onError={onError}>
+      <BabyForm Container={Fragment} _name="baby">
+        <input type="text" _name="name" _required _warning={warning} />
+      </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): custom warning', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value} onError={onError} warning={warning}>
+      <input type="text" _name="name" _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): custom child warning', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <input type="text" _name="name" _required _warning={warning} />
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): custom child warning in child BabyForm', (done) => {
+  const { value, warning, errors } = data;
+
+  const onError = (didMountErrors) => {
+    try {
+      const a = objToKey(didMountErrors);
+      const b = objToKey(errors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value} onError={onError}>
+      <BabyForm Container={null} _name="baby">
         <input type="text" _name="name" _required _warning={warning} />
       </BabyForm>
     </BabyForm>
