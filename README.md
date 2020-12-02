@@ -88,7 +88,7 @@ class Base extends Components {
 {
   value: {}, // PropTypes.Object, value from BabyForm
   warning: {}, // PropTypes.Object, warning message from BabyForm
-  Container: 'div', // PropTypes.element, The container for render.
+  Container: 'div', // PropTypes.element, The container for render, support React.Fragment.
   onChange: () => value. // PropTypes.func, Trigger when value change.
   onError: () => errors. // PropTypes.func, Trigger when render, return all errors or [].
 }
