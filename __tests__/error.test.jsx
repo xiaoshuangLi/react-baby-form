@@ -15,6 +15,11 @@ const data = {
       message: 'name is required',
     }],
   }],
+  nameErrors: [{
+    condition: true,
+    key: 'required',
+    message: 'name is required',
+  }],
 };
 
 const objToKey = (obj = {}, parentKeys = []) => {
@@ -38,6 +43,16 @@ const objToKey = (obj = {}, parentKeys = []) => {
     return `${res}${keyStr}=${valurStr}`;
   }, '');
 };
+
+const warn = console.warn.bind(console.warn);
+
+beforeAll(() => {
+  console.warn = () => {};
+});
+
+afterAll(() => {
+  console.warn = warn;
+});
 
 test('trigger onError when did mount', (done) => {
   const { value, errors } = data;
@@ -141,6 +156,78 @@ test('trigger onError by child BabyForm when did update', (done) => {
       <BabyForm _name="baby">
         <input type="text" _name="name" _required />
       </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('get props.errors with defaultProps.errors when did mount', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    try {
+      const a = objToKey(propsErrors);
+      const b = objToKey(nameErrors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm value={value}>
+      <Input type="text" _name="name" _error _required />
+    </BabyForm>
+  );
+});
+
+test('get props.errors with defaultProps.errors when did update', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    if (propsErrors.length) {
+      try {
+        const a = objToKey(propsErrors);
+        const b = objToKey(nameErrors);
+
+        expect(a).toBe(b);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm value={value}>
+      <Input type="text" _name="name" />
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm value={value}>
+      <Input type="text" _name="name" _error _required />
     </BabyForm>
   );
 });
@@ -251,6 +338,78 @@ test('Fragment: trigger onError by child BabyForm when did update', (done) => {
   );
 });
 
+test('Fragment: get props.errors with defaultProps.errors when did mount', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    try {
+      const a = objToKey(propsErrors);
+      const b = objToKey(nameErrors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value}>
+      <Input type="text" _name="name" _error _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment: get props.errors with defaultProps.errors when did update', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    if (propsErrors.length) {
+      try {
+        const a = objToKey(propsErrors);
+        const b = objToKey(nameErrors);
+
+        expect(a).toBe(b);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={Fragment} value={value}>
+      <Input type="text" _name="name" />
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={Fragment} value={value}>
+      <Input type="text" _name="name" _error _required />
+    </BabyForm>
+  );
+});
+
 test('Fragment(null): trigger onError when did mount', (done) => {
   const { value, errors } = data;
 
@@ -353,6 +512,78 @@ test('Fragment(null): trigger onError by child BabyForm when did update', (done)
       <BabyForm Container={null} _name="baby">
         <input type="text" _name="name" _required />
       </BabyForm>
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): get props.errors with defaultProps.errors when did mount', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    try {
+      const a = objToKey(propsErrors);
+      const b = objToKey(nameErrors);
+
+      expect(a).toBe(b);
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value}>
+      <Input type="text" _name="name" _error _required />
+    </BabyForm>
+  );
+});
+
+test('Fragment(null): get props.errors with defaultProps.errors when did update', (done) => {
+  const { value, nameErrors } = data;
+
+  const Input = (props = {}) => {
+    const { errors: propsErrors = [] } = props;
+
+    if (propsErrors.length) {
+      try {
+        const a = objToKey(propsErrors);
+        const b = objToKey(nameErrors);
+
+        expect(a).toBe(b);
+        done();
+      } catch (e) {
+        done(e);
+      }
+    }
+
+    return (
+      <input type="text" {...props} />
+    );
+  };
+
+  Input.defaultProps = {
+    errors: [],
+  };
+
+  const testRenderer = create(
+    <BabyForm Container={null} value={value}>
+      <Input type="text" _name="name" />
+    </BabyForm>
+  );
+
+  testRenderer.update(
+    <BabyForm Container={null} value={value}>
+      <Input type="text" _name="name" _error _required />
     </BabyForm>
   );
 });

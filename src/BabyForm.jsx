@@ -58,13 +58,17 @@ const Baby = React.forwardRef((props = {}, ref) => {
   });
 
   const initProps = _error ? { errors } : {};
-  const staticProps = Object.assign(initProps, others);
+  const staticProps = { ...others, ...initProps };
   const baseProps = getNeatProps(staticProps);
 
   const restProps = {
     ...baseProps,
     [_triggerAttr]: trigger,
   };
+
+  if ('errors' in others) {
+    console.warn('react-baby-form: The "errors" is keywords in props.The value will be overwritten.');
+  }
 
   return (
     <ComponentClasss ref={ref} {...restProps} />
@@ -314,7 +318,7 @@ export const submit = (ref) => {
         key: 'ref',
         value: ref,
         errors: [
-          { message: 'BabyForm Ref not work' },
+          { message: 'react-baby-form: ref not work' },
         ],
       },
     ];
