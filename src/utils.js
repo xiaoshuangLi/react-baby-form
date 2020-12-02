@@ -77,11 +77,30 @@ export const getNeatElement = (element = {}) => {
   );
 };
 
+export const isNeat = (child = {}) => {
+  const { props = {} } = child;
+  const { children, _name } = props;
+
+  const array = Children.toArray(children) || [];
+
+  if (_name) {
+    return false;
+  }
+
+  return array.every(isNeat);
+};
+
 export const recursiveMap = (children, fn) => Children.map(children, (child = {}) => {
   const valid = isValidElement(child);
 
   if (!valid) {
     return child;
+  }
+
+  const neat = isNeat(child);
+
+  if (neat) {
+    return getNeatElement(child);
   }
 
   const { props = {} } = child;
@@ -110,6 +129,12 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
 
   if (!valid) {
     return;
+  }
+
+  const neat = isNeat(child);
+
+  if (neat) {
+    return getNeatElement(child);
   }
 
   const { props = {} } = child;

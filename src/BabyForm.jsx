@@ -240,7 +240,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     return parentSubscribe ? parentSubscribe(submit) : undefined;
   }, [parentSubscribe, submit]);
 
-  useEffect(onError);
+  useEffect(
+    onError,
+    [propsValue, onError],
+  );
 
   useImperativeHandle(ref, () => {
     const obj = { submit };
