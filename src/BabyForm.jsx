@@ -13,12 +13,14 @@ import check from './check';
 import warn from './warn';
 
 import {
+  isUsefulName,
   getNeatProps,
   recursiveMap,
   recursiveForeach,
   mergeArray,
   getValueFromEvent,
   getCurrentFromRef,
+  getDefaultValue,
 } from './utils';
 
 import {
@@ -102,6 +104,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
 
+    if (propsValue === undefined) {
+      return Array.isArray(_name) ? [] : undefined;
+    }
+
     if (Array.isArray(_name)) {
       return _name.map(
         (item) => propsValue[item],
@@ -135,7 +141,9 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
         const { props: childProps = {} } = child;
         const { _name } = childProps;
 
-        if (!_name) {
+        const useful = isUsefulName(_name);
+
+        if (!useful) {
           return;
         }
 
@@ -199,8 +207,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       obj = { [_name]: childValue };
     }
 
-    const baseValue = Array.isArray(propsValue) ? [] : {};
-    const value = Object.assign(baseValue, propsValue, obj);
+    const baseValue = getDefaultValue(propsValue, _name);
+    const value = propsValue === undefined
+      ? Object.assign(baseValue, obj)
+      : Object.assign(baseValue, propsValue, obj);
 
     propsOnChange && propsOnChange(value);
   });
@@ -304,7 +314,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
 });
 
 BabyForm.defaultProps = {
-  value: {},
+  value: undefined,
   onChange: undefined,
   onError: undefined,
   warning: undefined,

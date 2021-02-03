@@ -27,7 +27,7 @@ const objToKey = (obj = {}, parentKeys = []) => {
 };
 
 test('submit(ref) with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -44,7 +44,7 @@ test('submit(ref) with no errors', async () => {
 });
 
 test('submit(ref) with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -63,7 +63,7 @@ test('submit(ref) with no errors and child BabyForm', async () => {
 });
 
 test('submit(ref) with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(
@@ -177,7 +177,7 @@ test('submit(ref) with errors  and complex data structure', async () => {
 });
 
 test('ref.current.submit() with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -194,7 +194,7 @@ test('ref.current.submit() with no errors', async () => {
 });
 
 test('ref.current.submit() with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -213,7 +213,7 @@ test('ref.current.submit() with no errors and child BabyForm', async () => {
 });
 
 test('ref.current.submit() with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(
@@ -327,7 +327,7 @@ test('ref.current.submit() with errors  and complex data structure', async () =>
 });
 
 test('Fragment: submit(ref) with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -344,7 +344,7 @@ test('Fragment: submit(ref) with no errors', async () => {
 });
 
 test('Fragment: submit(ref) with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -363,7 +363,7 @@ test('Fragment: submit(ref) with no errors and child BabyForm', async () => {
 });
 
 test('Fragment: submit(ref) with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(
@@ -477,7 +477,7 @@ test('Fragment: submit(ref) with errors  and complex data structure', async () =
 });
 
 test('Fragment: ref.current.submit() with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -494,7 +494,7 @@ test('Fragment: ref.current.submit() with no errors', async () => {
 });
 
 test('Fragment: ref.current.submit() with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -513,7 +513,7 @@ test('Fragment: ref.current.submit() with no errors and child BabyForm', async (
 });
 
 test('Fragment: ref.current.submit() with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(
@@ -627,7 +627,7 @@ test('Fragment: ref.current.submit() with errors  and complex data structure', a
 });
 
 test('Fragment(null): submit(ref) with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -644,7 +644,7 @@ test('Fragment(null): submit(ref) with no errors', async () => {
 });
 
 test('Fragment(null): submit(ref) with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -663,7 +663,7 @@ test('Fragment(null): submit(ref) with no errors and child BabyForm', async () =
 });
 
 test('Fragment(null): submit(ref) with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(
@@ -777,7 +777,7 @@ test('Fragment(null): submit(ref) with errors  and complex data structure', asyn
 });
 
 test('Fragment(null): ref.current.submit() with no errors', async () => {
-  const value = { name: 'xiaoshaung' };
+  const value = { name: 'xiaoshuang' };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -794,7 +794,7 @@ test('Fragment(null): ref.current.submit() with no errors', async () => {
 });
 
 test('Fragment(null): ref.current.submit() with no errors and child BabyForm', async () => {
-  const value = { baby: { name: 'xiaoshaung' } };
+  const value = { baby: { name: 'xiaoshuang' } };
   const ref = { current: null };
 
   const testRenderer = create(
@@ -813,7 +813,7 @@ test('Fragment(null): ref.current.submit() with no errors and child BabyForm', a
 });
 
 test('Fragment(null): ref.current.submit() with no errors and complex data structure', async () => {
-  const value = [{ baby: { name: 'xiaoshaung' } }];
+  const value = [{ baby: { name: 'xiaoshuang' } }];
   const ref = { current: null };
 
   const testRenderer = create(

@@ -6,8 +6,10 @@ const getTitleFromOpts = (opts = {}) => {
     title,
   } = opts;
 
-  const nameText = _name || name;
   const titleText = _title || title;
+  const nameText = _name === undefined
+    ? name
+    : _name;
 
   return titleText || nameText;
 };

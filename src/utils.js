@@ -77,13 +77,22 @@ export const getNeatElement = (element = {}) => {
   );
 };
 
+export const isUsefulName = (name) => {
+  if (name) {
+    return true;
+  }
+
+  return typeof name === 'number';
+};
+
 export const isNeat = (child = {}) => {
   const { props = {} } = child;
   const { children, _name } = props;
 
+  const useful = isUsefulName(_name);
   const array = Children.toArray(children) || [];
 
-  if (_name) {
+  if (useful) {
     return false;
   }
 
@@ -121,7 +130,7 @@ export const recursiveMap = (children, fn) => Children.map(children, (child = {}
     });
   }
 
-  return _name === undefined ? child : fn(child);
+  return isUsefulName(_name) ? fn(child) : child;
 });
 
 export const recursiveForeach = (children, fn) => Children.forEach(children, (child = {}) => {
@@ -161,7 +170,7 @@ export const mergeArray = (list = []) => list.reduce(
   [],
 );
 
-export function getValueFromEvent(event) {
+export const getValueFromEvent = (event) => {
   if (!event) {
     return event;
   }
@@ -176,9 +185,9 @@ export function getValueFromEvent(event) {
   }
 
   return target;
-}
+};
 
-export function getCurrentFromRef(ref) {
+export const getCurrentFromRef = (ref) => {
   if (!ref) {
     return ref;
   }
@@ -186,4 +195,20 @@ export function getCurrentFromRef(ref) {
   const { current = ref } = ref;
 
   return current;
-}
+};
+
+export const getDefaultValue = (propsValue, name) => {
+  if (propsValue !== undefined) {
+    return Array.isArray(propsValue) ? [] : {};
+  }
+
+  const list = Array.isArray(name)
+    ? name
+    : [name];
+
+  const good = list.every(
+    (item) => typeof item === 'number',
+  );
+
+  return good ? [] : {};
+};

@@ -18,16 +18,16 @@ test('trigger onChange when child change', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm value={value} onChange={onChange}>
       <input id="name" type="text" _name="name" _required />
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -56,18 +56,18 @@ test('trigger onChange from child BabyForm', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm value={value} onChange={onChange}>
       <BabyForm _name="baby">
         <input id="name" type="text" _name="name" _required />
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -88,7 +88,7 @@ test('trigger onChange from complex data structure', (done) => {
       baby: {
         name: 'xiaoshuang',
       },
-    }
+    },
   ];
 
   const onChange = (nextValue) => {
@@ -98,12 +98,12 @@ test('trigger onChange from complex data structure', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm value={value} onChange={onChange}>
       <BabyForm _name={0}>
         <BabyForm _name="baby">
@@ -111,7 +111,7 @@ test('trigger onChange from complex data structure', (done) => {
         </BabyForm>
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -138,16 +138,16 @@ test('Fragment: trigger onChange when child change', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={Fragment} value={value} onChange={onChange}>
       <input id="name" type="text" _name="name" _required />
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -176,18 +176,18 @@ test('Fragment: trigger onChange from child BabyForm', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={Fragment} value={value} onChange={onChange}>
       <BabyForm Container={Fragment} _name="baby">
         <input id="name" type="text" _name="name" _required />
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -218,12 +218,12 @@ test('Fragment: trigger onChange from complex data structure', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={Fragment} value={value} onChange={onChange}>
       <BabyForm Container={Fragment} _name={0}>
         <BabyForm Container={Fragment} _name="baby">
@@ -231,7 +231,7 @@ test('Fragment: trigger onChange from complex data structure', (done) => {
         </BabyForm>
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -258,16 +258,16 @@ test('Fragment(null): trigger onChange when child change', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={null} value={value} onChange={onChange}>
       <input id="name" type="text" _name="name" _required />
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -296,18 +296,18 @@ test('Fragment(null): trigger onChange from child BabyForm', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={null} value={value} onChange={onChange}>
       <BabyForm Container={null} _name="baby">
         <input id="name" type="text" _name="name" _required />
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
@@ -328,7 +328,7 @@ test('Fragment(null): trigger onChange from complex data structure', (done) => {
       baby: {
         name: 'xiaoshuang',
       },
-    }
+    },
   ];
 
   const onChange = (nextValue) => {
@@ -338,12 +338,12 @@ test('Fragment(null): trigger onChange from complex data structure', (done) => {
 
       expect(a).toBe(b);
       done();
-    } catch(e) {
+    } catch (e) {
       done(e);
     }
   };
 
-  const testRenderer = create(
+  const testRenderer = create((
     <BabyForm Container={null} value={value} onChange={onChange}>
       <BabyForm Container={null} _name={0}>
         <BabyForm Container={null} _name="baby">
@@ -351,7 +351,7 @@ test('Fragment(null): trigger onChange from complex data structure', (done) => {
         </BabyForm>
       </BabyForm>
     </BabyForm>
-  );
+  ));
 
   const { root } = testRenderer;
 
