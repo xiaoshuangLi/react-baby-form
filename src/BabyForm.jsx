@@ -63,7 +63,10 @@ const Baby = React.forwardRef((props = {}, ref) => {
   const staticProps = { ...others, ...initProps };
   const baseProps = getNeatProps(staticProps);
 
+  const key = value === undefined ? 'USELESS' : 'USEFUL';
+
   const restProps = {
+    key,
     ...baseProps,
     [_triggerAttr]: trigger,
   };
