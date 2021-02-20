@@ -1,6 +1,7 @@
 import React, {
   useRef,
   useMemo,
+  useState,
   useEffect,
   useLayoutEffect,
   useContext,
@@ -25,6 +26,7 @@ import {
 
 import {
   ParentContext,
+  usePrevious,
   useEventCallback,
   useDebounceCallback,
 } from './hooks';
@@ -42,6 +44,10 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
   const value = props[_valueAttr];
   const baseTrigger = props[_triggerAttr];
+
+  const [key, setKey] = useState(0);
+
+  const previousValue = usePrevious(value);
   const parent = useContext(ParentContext) || {};
 
   const {
@@ -50,6 +56,7 @@ const Baby = React.forwardRef((props = {}, ref) => {
   } = parent;
 
   const errors = getErrorsWithMessage(props, value);
+
   const trigger = useEventCallback((...list) => {
     const [e] = list;
 
@@ -63,13 +70,17 @@ const Baby = React.forwardRef((props = {}, ref) => {
   const staticProps = { ...others, ...initProps };
   const baseProps = getNeatProps(staticProps);
 
-  const key = value === undefined ? 'USELESS' : 'USEFUL';
-
   const restProps = {
     key,
     ...baseProps,
     [_triggerAttr]: trigger,
   };
+
+  useEffect(() => {
+    if (value === undefined && previousValue !== undefined) {
+      setKey((prevKey) => prevKey + 1);
+    }
+  }, [value, previousValue]);
 
   if ('errors' in others) {
     console.warn('react-baby-form: The "errors" is keywords in props.The value will be overwritten.');
