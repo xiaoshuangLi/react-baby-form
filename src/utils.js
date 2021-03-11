@@ -170,23 +170,6 @@ export const mergeArray = (list = []) => list.reduce(
   [],
 );
 
-export const getValueFromEvent = (event) => {
-  if (!event) {
-    return event;
-  }
-
-  event = event.nativeEvent === undefined ? event : event.nativeEvent;
-
-  const target = event.target === undefined ? event : event.target;
-  const value = target.value === undefined ? target : target.value;
-
-  if (target instanceof HTMLElement) {
-    return target.type === 'checkbox' ? target.checked : value;
-  }
-
-  return target;
-};
-
 export const getCurrentFromRef = (ref) => {
   if (!ref) {
     return ref;
@@ -211,4 +194,53 @@ export const getDefaultValue = (propsValue, name) => {
   );
 
   return good ? [] : {};
+};
+
+const isEventLike = (event) => {
+  if (!event) {
+    return false;
+  }
+
+  const { currentTarget, target } = event;
+
+  if (!currentTarget) {
+    return false;
+  }
+
+  if (!target) {
+    return false;
+  }
+
+  return target.value !== undefined;
+};
+
+const getValue = (event) => {
+  if (!event) {
+    return event;
+  }
+
+  const target = event.target === undefined ? event : event.target;
+  const value = target.value === undefined ? target : target.value;
+
+  if (target instanceof HTMLElement) {
+    return target.type === 'checkbox' ? target.checked : value;
+  }
+
+  if (isEventLike(event)) {
+    return value;
+  }
+
+  return target;
+};
+
+export const getValueFromEvent = (event) => {
+  if (!event) {
+    return event;
+  }
+
+  const value = getValue(event);
+
+  return value === undefined
+    ? getValue(event.nativeEvent)
+    : value;
 };
