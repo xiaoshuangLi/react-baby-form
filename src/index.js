@@ -1,4 +1,4 @@
-export { BabyContext } from './hooks';
+export { ParentContext } from './hooks';
 
 export * from './BabyForm';
 

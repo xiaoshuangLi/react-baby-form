@@ -25,15 +25,13 @@ import {
 } from './utils';
 
 import {
-  BabyContext,
   ParentContext,
   usePrevious,
   useEventCallback,
   useDebounceCallback,
 } from './hooks';
 
-const { Provider: BabyProvider } = BabyContext;
-const { Provider: ParentProvider } = ParentContext;
+const { Provider } = ParentContext;
 
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
@@ -256,11 +254,12 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   });
 
   const providerValue = useMemo(() => ({
+    submit,
     subscribe,
     getValue,
     getErrorsWithMessage,
     onChange,
-  }), [subscribe, getValue, getErrorsWithMessage, onChange]);
+  }), [submit, subscribe, getValue, getErrorsWithMessage, onChange]);
 
   useLayoutEffect(() => {
     return parentSubscribe ? parentSubscribe(submit) : undefined;
@@ -323,11 +322,9 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   };
 
   return (
-    <BabyProvider value={submit}>
-      <ParentProvider value={providerValue}>
-        { renderChildren() }
-      </ParentProvider>
-    </BabyProvider>
+    <Provider value={providerValue}>
+      { renderChildren() }
+    </Provider>
   );
 });
 

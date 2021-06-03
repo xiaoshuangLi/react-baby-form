@@ -7,11 +7,8 @@ import {
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 
-export const BabyContext = createContext(
-  () => Promise.resolve(),
-);
-
 export const ParentContext = createContext({
+  submit: () => Promise.resolve(),
   onChange: () => {},
 });
 
