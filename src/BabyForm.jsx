@@ -25,13 +25,15 @@ import {
 } from './utils';
 
 import {
+  BabyContext,
   ParentContext,
   usePrevious,
   useEventCallback,
   useDebounceCallback,
 } from './hooks';
 
-const { Provider } = ParentContext;
+const { Provider: BabyProvider } = BabyContext;
+const { Provider: ParentProvider } = ParentContext;
 
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
@@ -321,9 +323,11 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   };
 
   return (
-    <Provider value={providerValue}>
-      { renderChildren() }
-    </Provider>
+    <BabyProvider value={submit}>
+      <ParentProvider value={providerValue}>
+        { renderChildren() }
+      </ParentProvider>
+    </BabyProvider>
   );
 });
 

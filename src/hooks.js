@@ -1,13 +1,15 @@
 import {
   useRef,
-  useMemo,
   useEffect,
   useCallback,
-  createRef,
   createContext,
 } from 'react';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
+
+export const BabyContext = createContext(
+  () => Promise.resolve(),
+);
 
 export const ParentContext = createContext({
   onChange: () => {},
