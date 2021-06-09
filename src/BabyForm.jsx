@@ -29,6 +29,7 @@ import {
   usePrevious,
   useEventCallback,
   useDebounceCallback,
+  usePromise,
 } from './hooks';
 
 const { Provider } = ParentContext;
@@ -115,6 +116,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const parent = useContext(ParentContext) || {};
   const { subscribe: parentSubscribe } = parent;
 
+  const [promise, resolve] = usePromise();
+
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
 
@@ -147,7 +150,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     });
   });
 
-  const submit = useEventCallback(() => {
+  const submit = useEventCallback(async () => {
     const getChildrenErrors = () => {
       const errors = [];
 
@@ -193,18 +196,20 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       return Promise.all(promises).then(mergeArray);
     };
 
-    return new Promise((resolve, reject) => {
-      const promises = [
-        getChildrenErrors(),
-        getBabiesErrors(),
-      ];
+    await promise;
 
-      Promise.all(promises)
-        .then(mergeArray)
-        .then((errors = []) => {
-          errors.length ? reject(errors) : resolve(propsValue);
-        });
-    });
+    const result = await Promise.all([
+      getChildrenErrors(),
+      getBabiesErrors(),
+    ]);
+
+    const errors = mergeArray(result);
+
+    if (errors.length) {
+      throw errors;
+    }
+
+    return propsValue;
   });
 
   const onChange = useEventCallback((childProps = {}, e) => {
@@ -264,6 +269,10 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   useLayoutEffect(() => {
     return parentSubscribe ? parentSubscribe(submit) : undefined;
   }, [parentSubscribe, submit]);
+
+  useLayoutEffect(() => {
+    resolve && resolve();
+  }, [resolve]);
 
   useEffect(
     onError,

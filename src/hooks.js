@@ -1,5 +1,6 @@
 import {
   useRef,
+  useMemo,
   useEffect,
   useCallback,
   createContext,
@@ -44,4 +45,22 @@ export const useThrottleCallback = (callback, ...args) => {
   const fn = useEventCallback(callback);
 
   return useCallback(throttle(fn, ...args), [fn]);
+};
+
+export const usePromise = () => {
+  const resolveRef = useRef(() => {});
+  const rejectRef = useRef(() => {});
+
+  const promiseRef = useRef(new Promise((resolve, reject) => {
+    resolveRef.current = resolve;
+    rejectRef.current = reject;
+  }));
+
+  const refs = [promiseRef, resolveRef, rejectRef];
+
+  return useMemo(() => {
+    return refs.map(
+      (ref) => ref.current,
+    );
+  }, refs);
 };
