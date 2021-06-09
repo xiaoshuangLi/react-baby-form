@@ -1,6 +1,7 @@
 import {
   useRef,
   useMemo,
+  useState,
   useEffect,
   useCallback,
   createContext,
@@ -51,16 +52,20 @@ export const usePromise = () => {
   const resolveRef = useRef(() => {});
   const rejectRef = useRef(() => {});
 
-  const promiseRef = useRef(new Promise((resolve, reject) => {
-    resolveRef.current = resolve;
-    rejectRef.current = reject;
-  }));
+  const [promise] = useState(() => {
+    return new Promise((resolve, reject) => {
+      resolveRef.current = resolve;
+      rejectRef.current = reject;
+    });
+  });
 
-  const refs = [promiseRef, resolveRef, rejectRef];
+  const refs = [promise, resolveRef, rejectRef];
 
   return useMemo(() => {
-    return refs.map(
-      (ref) => ref.current,
-    );
-  }, refs);
+    return [
+      promise,
+      resolveRef.current,
+      rejectRef.current,
+    ];
+  }, [promise, resolveRef, rejectRef]);
 };
