@@ -201,11 +201,7 @@ const isEventLike = (event) => {
     return false;
   }
 
-  const { currentTarget, target } = event;
-
-  if (!currentTarget) {
-    return false;
-  }
+  const { target } = event;
 
   if (!target) {
     return false;
