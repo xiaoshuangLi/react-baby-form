@@ -143,7 +143,7 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
   const neat = isNeat(child);
 
   if (neat) {
-    return getNeatElement(child);
+    return;
   }
 
   const { props = {} } = child;
@@ -159,10 +159,10 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
   }
 
   if (propsChildren && !_stop) {
-    recursiveMap(propsChildren, fn);
+    recursiveForeach(propsChildren, fn);
   }
 
-  return _name === undefined ? child : fn(child);
+  _name === undefined ? child : fn(child);
 });
 
 export const mergeArray = (list = []) => list.reduce(
