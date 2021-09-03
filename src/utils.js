@@ -87,13 +87,26 @@ export const isUsefulName = (name) => {
 
 export const isNeat = (child = {}) => {
   const { props = {} } = child;
-  const { children, _name } = props;
+  const {
+    _stop,
+    _ignore,
+    _name,
+    children,
+  } = props;
 
   const useful = isUsefulName(_name);
   const array = Children.toArray(children) || [];
 
+  if (_ignore) {
+    return true;
+  }
+
   if (useful) {
     return false;
+  }
+
+  if (_stop) {
+    return true;
   }
 
   return array.every(isNeat);
