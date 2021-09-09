@@ -87,13 +87,26 @@ export const isUsefulName = (name) => {
 
 export const isNeat = (child = {}) => {
   const { props = {} } = child;
-  const { children, _name } = props;
+  const {
+    _stop,
+    _ignore,
+    _name,
+    children,
+  } = props;
 
   const useful = isUsefulName(_name);
   const array = Children.toArray(children) || [];
 
+  if (_ignore) {
+    return true;
+  }
+
   if (useful) {
     return false;
+  }
+
+  if (_stop) {
+    return true;
   }
 
   return array.every(isNeat);
@@ -143,7 +156,7 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
   const neat = isNeat(child);
 
   if (neat) {
-    return getNeatElement(child);
+    return;
   }
 
   const { props = {} } = child;
@@ -159,10 +172,10 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
   }
 
   if (propsChildren && !_stop) {
-    recursiveMap(propsChildren, fn);
+    recursiveForeach(propsChildren, fn);
   }
 
-  return _name === undefined ? child : fn(child);
+  _name === undefined ? child : fn(child);
 });
 
 export const mergeArray = (list = []) => list.reduce(
