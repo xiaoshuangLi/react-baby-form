@@ -7,6 +7,6 @@
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error",
-    "jest/no-done-callback": "no"
+    "jest/no-done-callback": "off"
   }
 }

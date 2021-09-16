@@ -98,7 +98,6 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const {
     className,
     Container,
-    children,
     _stop,
     warning,
     value: propsValue,
@@ -106,6 +105,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     onError: propsOnError,
     ...others
   } = props;
+  const { children } = others;
 
   const cls = classnames({
     'components-baby-form-render': true,
@@ -311,28 +311,23 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     );
   };
 
-  const renderChildren = () => {
+  const renderContent = () => {
     const fragment = !Container || Container === Fragment;
-    const renderContent = () => recursiveMap(children, renderChild);
 
     if (fragment) {
-      return (
-        <>
-          { renderContent() }
-        </>
-      );
+      return recursiveMap(children, renderChild);
     }
 
-    return (
-      <Container ref={ref} className={cls} {...others}>
-        { renderContent() }
-      </Container>
+    const content = (
+      <Container ref={ref} className={cls} {...others} />
     );
+
+    return recursiveMap(content, renderChild);
   };
 
   return (
     <Provider value={providerValue}>
-      { renderChildren() }
+      { renderContent() }
     </Provider>
   );
 });

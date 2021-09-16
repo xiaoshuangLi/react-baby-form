@@ -85,17 +85,21 @@ export const isUsefulName = (name) => {
   return typeof name === 'number';
 };
 
+const isValidElements = (elements) => {
+  return Array.isArray(elements)
+    ? elements.some(isValidElements)
+    : isValidElement(elements);
+};
+
 export const isNeat = (child = {}) => {
   const { props = {} } = child;
   const {
+    _name,
     _stop,
     _ignore,
-    _name,
-    children,
   } = props;
 
   const useful = isUsefulName(_name);
-  const array = Children.toArray(children) || [];
 
   if (_ignore) {
     return true;
@@ -109,7 +113,15 @@ export const isNeat = (child = {}) => {
     return true;
   }
 
-  return array.every(isNeat);
+  return Object.values(props).every((value) => {
+    if (isValidElements(value)) {
+      return Children
+        .toArray(value)
+        .every(isNeat);
+    }
+
+    return true;
+  });
 };
 
 export const recursiveMap = (children, fn) => Children.map(children, (child = {}) => {
@@ -127,20 +139,32 @@ export const recursiveMap = (children, fn) => Children.map(children, (child = {}
 
   const { props = {} } = child;
   const {
+    _name,
     _stop,
     _ignore,
-    _name,
-    children: propsChildren,
   } = props;
 
   if (_ignore) {
     return getNeatElement(child);
   }
 
-  if (propsChildren && !_stop) {
-    child = cloneElement(child, {
-      children: recursiveMap(propsChildren, fn),
+  if (!_stop) {
+    const entries = Object.entries(props);
+    const needCloneEntries = entries.filter((entry = []) => {
+      const [, value] = entry;
+      return isValidElements(value);
     });
+
+    if (needCloneEntries.length) {
+      const clonedProps = needCloneEntries.reduce((res = {}, entry) => {
+        const [key, value] = entry;
+
+        res[key] = recursiveMap(value, fn);
+        return res;
+      }, {});
+
+      child = cloneElement(child, clonedProps);
+    }
   }
 
   return isUsefulName(_name) ? fn(child) : child;
@@ -161,18 +185,19 @@ export const recursiveForeach = (children, fn) => Children.forEach(children, (ch
 
   const { props = {} } = child;
   const {
+    _name,
     _stop,
     _ignore,
-    _name,
-    children: propsChildren,
   } = props;
 
   if (_ignore) {
     return;
   }
 
-  if (propsChildren && !_stop) {
-    recursiveForeach(propsChildren, fn);
+  if (!_stop) {
+    Object.values(props).forEach((value) => {
+      isValidElements(value) && recursiveMap(value, fn);
+    });
   }
 
   _name === undefined ? child : fn(child);
