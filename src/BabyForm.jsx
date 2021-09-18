@@ -62,9 +62,9 @@ const Baby = React.forwardRef((props = {}, ref) => {
     const [e] = list;
 
     e && e.stopPropagation && e.stopPropagation();
-    baseTrigger && baseTrigger(...list);
 
     onChange(props, ...list);
+    baseTrigger && baseTrigger(...list);
   });
 
   const initProps = _error ? { errors } : {};
