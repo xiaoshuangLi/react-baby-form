@@ -94,6 +94,27 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
 const MemoBaby = React.memo(Baby);
 
+const useSetter = (props = {}) => {
+  const {
+    value: propsValue,
+    onChange: propsOnChange,
+  } = props;
+
+  const ref = useRef(propsValue);
+
+  useEffect(() => {
+    ref.current = propsValue;
+  }, [propsValue]);
+
+  return useEventCallback((value) => {
+    ref.current = typeof value === 'function'
+      ? value(ref.current)
+      : value;
+
+    propsOnChange && propsOnChange(ref.current);
+  });
+};
+
 const BabyForm = React.forwardRef((props = {}, ref) => {
   const {
     className,
@@ -116,6 +137,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const parent = useContext(ParentContext) || {};
   const { subscribe: parentSubscribe } = parent;
 
+  const setter = useSetter(props);
   const [promise, resolve] = usePromise();
 
   const getValue = useEventCallback((childProps = {}) => {
@@ -226,12 +248,13 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       obj = { [_name]: childValue };
     }
 
-    const baseValue = getDefaultValue(propsValue, _name);
-    const value = propsValue === undefined
-      ? Object.assign(baseValue, obj)
-      : Object.assign(baseValue, propsValue, obj);
+    setter((prevValue) => {
+      const baseValue = getDefaultValue(prevValue, _name);
 
-    propsOnChange && propsOnChange(value);
+      return prevValue === undefined
+        ? Object.assign(baseValue, obj)
+        : Object.assign(baseValue, prevValue, obj);
+    });
   });
 
   const onError = useDebounceCallback(() => {
