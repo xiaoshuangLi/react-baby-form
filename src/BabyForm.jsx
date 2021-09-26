@@ -94,25 +94,34 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
 const MemoBaby = React.memo(Baby);
 
-const useSetter = (props = {}) => {
+const usePropsValue = (props = {}) => {
   const {
     value: propsValue,
     onChange: propsOnChange,
   } = props;
 
-  const ref = useRef(propsValue);
+  const [value, setValue] = useState(propsValue);
 
-  useEffect(() => {
-    ref.current = propsValue;
-  }, [propsValue]);
+  const onChangeValue = useEventCallback(() => {
+    if (propsValue === value) {
+      return;
+    }
 
-  return useEventCallback((value) => {
-    ref.current = typeof value === 'function'
-      ? value(ref.current)
-      : value;
-
-    propsOnChange && propsOnChange(ref.current);
+    propsOnChange && propsOnChange(value);
   });
+
+  const onChangePropsValue = useEventCallback(() => {
+    if (propsValue === value) {
+      return;
+    }
+
+    setValue(propsValue);
+  });
+
+  useEffect(onChangeValue, [value]);
+  useEffect(onChangePropsValue, [propsValue]);
+
+  return [value, setValue];
 };
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
@@ -121,8 +130,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     Container,
     _stop,
     warning,
-    value: propsValue,
-    onChange: propsOnChange,
+    value: a,
+    onChange: b,
     onError: propsOnError,
     ...others
   } = props;
@@ -137,8 +146,8 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const parent = useContext(ParentContext) || {};
   const { subscribe: parentSubscribe } = parent;
 
-  const setter = useSetter(props);
   const [promise, resolve] = usePromise();
+  const [propsValue, setPropsValue] = usePropsValue(props);
 
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
@@ -241,14 +250,14 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     let obj;
 
     if (Array.isArray(_name)) {
-      obj = _name.reduce((a, key, index) => {
-        return { ...a, [key]: childValue[index] };
+      obj = _name.reduce((res = {}, key, index) => {
+        return { ...res, [key]: childValue[index] };
       }, {});
     } else {
       obj = { [_name]: childValue };
     }
 
-    setter((prevValue) => {
+    setPropsValue((prevValue) => {
       const baseValue = getDefaultValue(prevValue, _name);
 
       return prevValue === undefined
