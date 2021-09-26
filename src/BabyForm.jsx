@@ -100,28 +100,33 @@ const usePropsValue = (props = {}) => {
     onChange: propsOnChange,
   } = props;
 
-  const [value, setValue] = useState(propsValue);
+  const ref = useRef(propsValue);
+  const [state, setState] = useState(propsValue);
 
-  const onChangeValue = useEventCallback(() => {
-    if (propsValue === value) {
+  const setPropsValue = useEventCallback((value) => {
+    ref.current = value === 'function'
+      ? value(ref.current)
+      : value;
+
+    setState(ref.current);
+  });
+
+  const onChangeState = useEventCallback(() => {
+    if (propsValue === state) {
       return;
     }
 
-    propsOnChange && propsOnChange(value);
+    propsOnChange && propsOnChange(state);
   });
 
   const onChangePropsValue = useEventCallback(() => {
-    if (propsValue === value) {
-      return;
-    }
-
-    setValue(propsValue);
+    ref.current = propsValue;
   });
 
-  useEffect(onChangeValue, [value]);
+  useEffect(onChangeState, [state]);
   useEffect(onChangePropsValue, [propsValue]);
 
-  return [value, setValue];
+  return [propsValue, setPropsValue];
 };
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
