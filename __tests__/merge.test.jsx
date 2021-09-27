@@ -55,10 +55,7 @@ test('merge change when didMount', (done) => {
   );
 
   setTimeout(() => {
-    expect(value).toEqual(
-      expect.arrayContaining([CHAR, CHAR]),
-    );
-
+    expect(value).toEqual([CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -78,9 +75,7 @@ test('merge change when lazy', (done) => {
   );
 
   setTimeout(() => {
-    expect(value).toEqual(
-      expect.arrayContaining([CHAR, CHAR]),
-    );
+    expect(value).toEqual([CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -102,9 +97,7 @@ test('merge change when someone lazy', (done) => {
   );
 
   setTimeout(() => {
-    expect(value).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -130,9 +123,7 @@ test('merge change when someone lazy with complex structure', (done) => {
   );
 
   setTimeout(() => {
-    expect(value.arraies[1]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -164,12 +155,8 @@ test('merge change when someone lazy with complex structure and multiple BabyFor
   );
 
   setTimeout(() => {
-    expect(value.arraies[0]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
-    expect(value.arraies[1]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value.arraies[0]).toEqual([CHAR, CHAR, CHAR, CHAR]);
+    expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -197,9 +184,7 @@ test('merge change when someone lazy with complex structure and multiple BabyFor
   );
 
   setTimeout(() => {
-    expect(value.arraies[1]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -241,12 +226,8 @@ test('merge change when someone lazy with complex structure and multiple childre
   );
 
   setTimeout(() => {
-    expect(value.arraies[0]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
-    expect(value.arraies[1]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value.arraies[0]).toEqual([CHAR, CHAR, CHAR, CHAR]);
+    expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
@@ -268,9 +249,7 @@ test('merge change when someone lazy with complex structure and multiple childre
   );
 
   setTimeout(() => {
-    expect(value.arraies[1]).toEqual(
-      expect.arrayContaining([CHAR, CHAR, CHAR, CHAR]),
-    );
+    expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
