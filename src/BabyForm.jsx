@@ -111,6 +111,10 @@ const usePropsValue = (props = {}) => {
     setState(ref.current);
   });
 
+  const onChangePropsValue = useEventCallback(() => {
+    ref.current = propsValue;
+  });
+
   const onChangeState = useEventCallback(() => {
     if (propsValue === state) {
       return;
@@ -119,14 +123,10 @@ const usePropsValue = (props = {}) => {
     propsOnChange && propsOnChange(state);
   });
 
-  const onChangePropsValue = useEventCallback(() => {
-    ref.current = propsValue;
-  });
-
+  useMemo(onChangePropsValue, [propsValue]);
   useEffect(onChangeState, [state]);
-  useEffect(onChangePropsValue, [propsValue]);
 
-  return [propsValue, setPropsValue];
+  return [ref.current, setPropsValue];
 };
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
