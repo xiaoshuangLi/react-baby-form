@@ -104,15 +104,11 @@ const usePropsValue = (props = {}) => {
   const [state, setState] = useState(propsValue);
 
   const setPropsValue = useEventCallback((value) => {
-    ref.current = value === 'function'
+    ref.current = typeof value === 'function'
       ? value(ref.current)
       : value;
 
     setState(ref.current);
-  });
-
-  const onChangePropsValue = useEventCallback(() => {
-    ref.current = propsValue;
   });
 
   const onChangeState = useEventCallback(() => {
@@ -123,8 +119,12 @@ const usePropsValue = (props = {}) => {
     propsOnChange && propsOnChange(state);
   });
 
-  useMemo(onChangePropsValue, [propsValue]);
+  const onChangePropsValue = useEventCallback(() => {
+    ref.current = propsValue;
+  });
+
   useEffect(onChangeState, [state]);
+  useEffect(onChangePropsValue, [propsValue]);
 
   return [ref.current, setPropsValue];
 };
