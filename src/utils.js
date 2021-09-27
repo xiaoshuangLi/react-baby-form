@@ -28,7 +28,7 @@ import React, {
 }
  */
 
-const childPropsKeys = [
+export const childPropsKeys = [
   '_ignore',
   '_stop',
   '_error',

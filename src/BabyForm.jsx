@@ -34,9 +34,12 @@ import {
 
 const { Provider } = ParentContext;
 
+const BABY = '@@BABY';
+
 const Baby = React.forwardRef((props = {}, ref) => {
   const {
     ComponentClasss,
+    _name,
     _valueAttr = 'value',
     _triggerAttr = 'onChange',
     _error = false,
@@ -77,6 +80,10 @@ const Baby = React.forwardRef((props = {}, ref) => {
     [_triggerAttr]: trigger,
   };
 
+  if (BABY in others) {
+    restProps._name = _name;
+  }
+
   useEffect(() => {
     if (value === undefined && previousValue !== undefined) {
       setKey((prevKey) => prevKey + 1);
@@ -94,8 +101,9 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
 const MemoBaby = React.memo(Baby);
 
-const usePropsValue = (props = {}) => {
+const useProxy = (props = {}) => {
   const {
+    _name,
     value: propsValue,
     onChange: propsOnChange,
   } = props;
@@ -103,12 +111,29 @@ const usePropsValue = (props = {}) => {
   const ref = useRef(propsValue);
   const [state, setState] = useState(propsValue);
 
-  const setPropsValue = useEventCallback((value) => {
-    ref.current = typeof value === 'function'
-      ? value(ref.current)
-      : value;
+  const { getValue, onChange } = useContext(ParentContext);
 
-    setState(ref.current);
+  const baby = { _name };
+  const useful = isUsefulName(_name);
+
+  const getter = useEventCallback(() => {
+    return ref.current;
+  });
+
+  const setter = useEventCallback((value) => {
+    if (useful) {
+      ref.current = typeof value === 'function'
+        ? value(getValue(baby))
+        : value;
+
+      onChange && onChange(baby, ref.current);
+    } else {
+      ref.current = typeof value === 'function'
+        ? value(ref.current)
+        : value;
+
+      setState(ref.current);
+    }
   });
 
   const onChangeState = useEventCallback(() => {
@@ -123,20 +148,22 @@ const usePropsValue = (props = {}) => {
     ref.current = propsValue;
   });
 
+  useMemo(onChangePropsValue, [propsValue]);
   useEffect(onChangeState, [state]);
-  useEffect(onChangePropsValue, [propsValue]);
 
-  return [ref.current, setPropsValue];
+  return { getter, setter };
 };
 
 const BabyForm = React.forwardRef((props = {}, ref) => {
   const {
     className,
     Container,
-    _stop,
     warning,
-    value: a,
-    onChange: b,
+    _stop,
+    _name,
+    [BABY]: a,
+    value: propsValue,
+    onChange: propsOnChange,
     onError: propsOnError,
     ...others
   } = props;
@@ -152,22 +179,24 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const { subscribe: parentSubscribe } = parent;
 
   const [promise, resolve] = usePromise();
-  const [propsValue, setPropsValue] = usePropsValue(props);
+  const { getter, setter } = useProxy(props);
 
   const getValue = useEventCallback((childProps = {}) => {
     const { _name = '' } = childProps;
 
-    if (propsValue === undefined) {
+    const got = getter();
+
+    if (got === undefined) {
       return Array.isArray(_name) ? [] : undefined;
     }
 
     if (Array.isArray(_name)) {
       return _name.map(
-        (item) => propsValue[item],
+        (item) => got[item],
       );
     }
 
-    return propsValue[_name];
+    return got[_name];
   });
 
   const getErrorsWithMessage = useEventCallback((childProps = {}, e) => {
@@ -262,7 +291,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       obj = { [_name]: childValue };
     }
 
-    setPropsValue((prevValue) => {
+    setter((prevValue) => {
       const baseValue = getDefaultValue(prevValue, _name);
 
       return prevValue === undefined
@@ -279,7 +308,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
       .catch((errors) => {
         propsOnError && propsOnError(errors);
       });
-  }, 1000);
+  }, 300);
 
   const subscribe = useEventCallback((baby) => {
     const { current: babies = [] } = babiesRef;
@@ -371,11 +400,13 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
 
 BabyForm.defaultProps = {
   value: undefined,
-  onChange: undefined,
-  onError: undefined,
   warning: undefined,
+  onError: undefined,
+  onChange: undefined,
   Container: 'div',
+  _name: '',
   _stop: true,
+  [BABY]: undefined,
 };
 
 export const submit = (ref) => {

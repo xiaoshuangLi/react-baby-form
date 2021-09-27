@@ -59,8 +59,6 @@ export const usePromise = () => {
     });
   });
 
-  const refs = [promise, resolveRef, rejectRef];
-
   return useMemo(() => {
     return [
       promise,
