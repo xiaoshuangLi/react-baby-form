@@ -30,7 +30,7 @@ const objToKey = (obj = {}, parentKeys = []) => {
   }
 
   const keys = Object.keys(obj).sort(
-    (a, b) => a > b ? 1 : -1
+    (a, b) => a > b ? 1 : -1,
   );
 
   return keys.reduce((res = '', key) => {

@@ -56,11 +56,11 @@ const useProxy = (props = {}) => {
 
   const setter = useEventCallback((value) => {
     if (useful) {
-      ref.current = typeof value === 'function'
+      value = typeof value === 'function'
         ? value(getValue(baby))
         : value;
 
-      onChange && onChange(baby, ref.current);
+      onChange && onChange(baby, value);
     } else {
       ref.current = typeof value === 'function'
         ? value(ref.current)

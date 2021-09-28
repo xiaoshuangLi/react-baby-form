@@ -29,13 +29,11 @@ const Baby = React.forwardRef((props = {}, ref) => {
 
   const [key, setKey] = useState(0);
 
-  const previousValue = usePrevious(value);
-  const parent = useContext(ParentContext) || {};
+  const isUndefined = value === undefined;
+  const isPreviousUndefined = usePrevious(isUndefined);
 
-  const {
-    getErrorsWithMessage,
-    onChange,
-  } = parent;
+  const parent = useContext(ParentContext) || {};
+  const { getErrorsWithMessage, onChange } = parent;
 
   const errors = getErrorsWithMessage(props, value);
 
@@ -63,10 +61,10 @@ const Baby = React.forwardRef((props = {}, ref) => {
   }
 
   useEffect(() => {
-    if (value === undefined && previousValue !== undefined) {
+    if (isUndefined && !isPreviousUndefined) {
       setKey((prevKey) => prevKey + 1);
     }
-  }, [value, previousValue]);
+  }, [isUndefined, isPreviousUndefined]);
 
   if ('errors' in others) {
     console.warn('react-baby-form: The "errors" is keywords in props.The value will be overwritten.');
