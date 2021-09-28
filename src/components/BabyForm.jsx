@@ -10,96 +10,29 @@ import React, {
 } from 'react';
 import classnames from 'classnames';
 
-import check from './check';
-import warn from './warn';
-
 import {
   isUsefulName,
-  getNeatProps,
   recursiveMap,
   recursiveForeach,
   mergeArray,
   getValueFromEvent,
-  getCurrentFromRef,
   getDefaultValue,
-} from './utils';
+} from '../utils';
 
 import {
   ParentContext,
-  usePrevious,
+  usePromise,
   useEventCallback,
   useDebounceCallback,
-  usePromise,
-} from './hooks';
+} from '../utils/hooks';
+
+import warn from '../utils/warn';
+import check from '../utils/check';
+import { BABY } from '../utils/constants';
+
+import Baby from './Baby';
 
 const { Provider } = ParentContext;
-
-const BABY = '@@BABY';
-
-const Baby = React.forwardRef((props = {}, ref) => {
-  const {
-    ComponentClasss,
-    _name,
-    _valueAttr = 'value',
-    _triggerAttr = 'onChange',
-    _error = false,
-    ...others
-  } = props;
-
-  const value = props[_valueAttr];
-  const baseTrigger = props[_triggerAttr];
-
-  const [key, setKey] = useState(0);
-
-  const previousValue = usePrevious(value);
-  const parent = useContext(ParentContext) || {};
-
-  const {
-    getErrorsWithMessage,
-    onChange,
-  } = parent;
-
-  const errors = getErrorsWithMessage(props, value);
-
-  const trigger = useEventCallback((...list) => {
-    const [e] = list;
-
-    e && e.stopPropagation && e.stopPropagation();
-
-    onChange(props, ...list);
-    baseTrigger && baseTrigger(...list);
-  });
-
-  const initProps = _error ? { errors } : {};
-  const staticProps = { ...others, ...initProps };
-  const baseProps = getNeatProps(staticProps);
-
-  const restProps = {
-    key,
-    ...baseProps,
-    [_triggerAttr]: trigger,
-  };
-
-  if (BABY in others) {
-    restProps._name = _name;
-  }
-
-  useEffect(() => {
-    if (value === undefined && previousValue !== undefined) {
-      setKey((prevKey) => prevKey + 1);
-    }
-  }, [value, previousValue]);
-
-  if ('errors' in others) {
-    console.warn('react-baby-form: The "errors" is keywords in props.The value will be overwritten.');
-  }
-
-  return (
-    <ComponentClasss ref={ref} {...restProps} />
-  );
-});
-
-const MemoBaby = React.memo(Baby);
 
 const useProxy = (props = {}) => {
   const {
@@ -108,16 +41,17 @@ const useProxy = (props = {}) => {
     onChange: propsOnChange,
   } = props;
 
-  const ref = useRef(propsValue);
-  const [state, setState] = useState(propsValue);
-
   const { getValue, onChange } = useContext(ParentContext);
 
   const baby = { _name };
   const useful = isUsefulName(_name);
+  const initial = useful ? undefined : propsValue;
+
+  const ref = useRef(initial);
+  const [state, setState] = useState(ref.current);
 
   const getter = useEventCallback(() => {
-    return ref.current;
+    return useful ? getValue(baby) : ref.current;
   });
 
   const setter = useEventCallback((value) => {
@@ -141,10 +75,18 @@ const useProxy = (props = {}) => {
       return;
     }
 
+    if (useful) {
+      return;
+    }
+
     propsOnChange && propsOnChange(state);
   });
 
   const onChangePropsValue = useEventCallback(() => {
+    if (useful) {
+      return;
+    }
+
     ref.current = propsValue;
   });
 
@@ -373,7 +315,7 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     const childProps = { ...baseChildProps, [_valueAttr]: childValue };
 
     return (
-      <MemoBaby key={key} ref={childRef} ComponentClasss={type} {...childProps} />
+      <Baby key={key} ref={childRef} ComponentClasss={type} {...childProps} />
     );
   };
 
@@ -407,26 +349,6 @@ BabyForm.defaultProps = {
   _name: '',
   _stop: true,
   [BABY]: undefined,
-};
-
-export const submit = (ref) => {
-  const current = getCurrentFromRef(ref);
-
-  if (!current) {
-    const error = [
-      {
-        key: 'ref',
-        value: ref,
-        errors: [
-          { message: 'react-baby-form: ref not work' },
-        ],
-      },
-    ];
-
-    return Promise.reject(error);
-  }
-
-  return current.submit();
 };
 
 export default BabyForm;

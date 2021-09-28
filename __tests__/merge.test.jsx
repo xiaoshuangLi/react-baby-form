@@ -4,7 +4,7 @@ import BabyForm from '../src';
 
 import { create } from './utils';
 
-const CHAR = '1';
+const CHAR = '@';
 
 const Input = (props = {}) => {
   const { value, onChange } = props;

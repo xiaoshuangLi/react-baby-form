@@ -1,7 +1,7 @@
 import React, {
   Children,
-  isValidElement,
   cloneElement,
+  isValidElement,
 } from 'react';
 
 /**
@@ -216,6 +216,26 @@ export const getCurrentFromRef = (ref) => {
   const { current = ref } = ref;
 
   return current;
+};
+
+export const submit = (ref) => {
+  const current = getCurrentFromRef(ref);
+
+  if (!current) {
+    const error = [
+      {
+        key: 'ref',
+        value: ref,
+        errors: [
+          { message: 'react-baby-form: ref not work' },
+        ],
+      },
+    ];
+
+    return Promise.reject(error);
+  }
+
+  return current.submit();
 };
 
 export const getDefaultValue = (propsValue, name) => {

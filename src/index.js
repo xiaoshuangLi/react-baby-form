@@ -1,5 +1,4 @@
-export { ParentContext } from './hooks';
+export { submit } from './utils';
+export { ParentContext } from './utils/hooks';
 
-export * from './BabyForm';
-
-export { default } from './BabyForm';
+export { default } from './components/BabyForm';

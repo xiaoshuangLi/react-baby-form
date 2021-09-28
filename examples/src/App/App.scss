@@ -158,6 +158,17 @@ $black4: #ccc;
   }
 }
 
+@mixin appBase {
+  .app-base {
+    @include baseItem;
+
+    @include baseForm;
+    @include baseButton;
+    @include baseErrors;
+  }
+
+}
+
 * {
   outline: none;
   box-sizing: border-box;
@@ -167,18 +178,22 @@ body {
   background: $grey;
 }
 
-.pages-home-base-render {
-  width: 300px;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 3px 10px rgba(black, .05);
+.pages-app-render {
+  display: flex;
 
   @extend %percenter;
 
-  @include baseItem;
+  > * {
+    width: 300px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 3px 10px rgba(black, .05);
 
-  @include baseForm;
-  @include baseButton;
-  @include baseErrors;
+    & + * {
+      margin-left: 10px;
+    }
+  }
+
+  @include appBase;
 }
