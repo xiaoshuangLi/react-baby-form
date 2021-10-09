@@ -61,7 +61,7 @@ const Baby = React.forwardRef((props = {}, ref) => {
   }
 
   useEffect(() => {
-    if (isUndefined && !isPreviousUndefined) {
+    if (isUndefined && isPreviousUndefined === false) {
       setKey((prevKey) => prevKey + 1);
     }
   }, [isUndefined, isPreviousUndefined]);

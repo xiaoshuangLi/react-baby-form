@@ -41,9 +41,11 @@ const LazyInput = (props = {}) => {
 };
 
 test('merge change when didMount', (done) => {
+  let count = 0;
   let value = [];
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -55,15 +57,18 @@ test('merge change when didMount', (done) => {
   );
 
   setTimeout(() => {
+    expect(count).toEqual(1);
     expect(value).toEqual([CHAR, CHAR]);
     done();
   }, 1000);
 });
 
 test('merge change when lazy', (done) => {
+  let count = 0;
   let value = [];
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -75,15 +80,18 @@ test('merge change when lazy', (done) => {
   );
 
   setTimeout(() => {
+    expect(count).toEqual(2);
     expect(value).toEqual([CHAR, CHAR]);
     done();
   }, 1000);
 });
 
 test('merge change when someone lazy', (done) => {
+  let count = 0;
   let value = [];
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -97,15 +105,18 @@ test('merge change when someone lazy', (done) => {
   );
 
   setTimeout(() => {
+    expect(count).toEqual(3);
     expect(value).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
 
 test('merge change when someone lazy with complex structure', (done) => {
+  let count = 0;
   let value = {};
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -123,15 +134,18 @@ test('merge change when someone lazy with complex structure', (done) => {
   );
 
   setTimeout(() => {
+    expect(count).toEqual(3);
     expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
 });
 
 test('merge change when someone lazy with complex structure and multiple BabyForm', (done) => {
+  let count = 0;
   let value = {};
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -155,6 +169,7 @@ test('merge change when someone lazy with complex structure and multiple BabyFor
   );
 
   setTimeout(() => {
+    expect(count).toEqual(5);
     expect(value.arraies[0]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
@@ -162,9 +177,11 @@ test('merge change when someone lazy with complex structure and multiple BabyFor
 });
 
 test('merge change when someone lazy with complex structure and multiple BabyForm on same attribute', (done) => {
+  let count = 0;
   let value = {};
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -184,6 +201,7 @@ test('merge change when someone lazy with complex structure and multiple BabyFor
   );
 
   setTimeout(() => {
+    expect(count).toEqual(3);
     expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
@@ -210,9 +228,11 @@ const Baby = (props = {}) => {
 };
 
 test('merge change when someone lazy with complex structure and multiple children', (done) => {
+  let count = 0;
   let value = {};
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -226,6 +246,7 @@ test('merge change when someone lazy with complex structure and multiple childre
   );
 
   setTimeout(() => {
+    expect(count).toEqual(5);
     expect(value.arraies[0]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
@@ -233,9 +254,11 @@ test('merge change when someone lazy with complex structure and multiple childre
 });
 
 test('merge change when someone lazy with complex structure and multiple children on same attribute', (done) => {
+  let count = 0;
   let value = {};
 
   const onChange = (nextValue) => {
+    count += 1;
     value = nextValue;
   };
 
@@ -249,6 +272,7 @@ test('merge change when someone lazy with complex structure and multiple childre
   );
 
   setTimeout(() => {
+    expect(count).toEqual(6);
     expect(value.arraies[1]).toEqual([CHAR, CHAR, CHAR, CHAR]);
     done();
   }, 1000);
