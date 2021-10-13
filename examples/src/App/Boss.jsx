@@ -8,7 +8,7 @@ import BabyForm from 'react-baby-form';
 
 const CHAR = '@';
 
-const Input = (props = {}) => {
+const Input = React.forwardRef((props = {}, ref) => {
   const { value, onChange } = props;
 
   useEffect(() => {
@@ -20,11 +20,11 @@ const Input = (props = {}) => {
   }, [value, onChange]);
 
   return (
-    <input type="text" {...props} />
+    <input ref={ref} type="text" {...props} />
   );
-};
+});
 
-const LazyInput = (props = {}) => {
+const LazyInput = React.forwardRef((props = {}, ref) => {
   const { value, onChange } = props;
 
   useEffect(() => {
@@ -38,11 +38,11 @@ const LazyInput = (props = {}) => {
   }, [value, onChange]);
 
   return (
-    <input type="text" {...props} />
+    <input ref={ref} type="text" {...props} />
   );
-};
+});
 
-const Baby = (props = {}) => {
+const Baby = React.forwardRef((props = {}, ref) => {
   const { names = [], ...others } = props;
 
   const children = names.map((name, index) => {
@@ -56,13 +56,13 @@ const Baby = (props = {}) => {
   });
 
   return (
-    <BabyForm {...others}>
+    <BabyForm ref={ref} {...others}>
       { children }
     </BabyForm>
   );
-};
+});
 
-const Boss = (props = {}) => {
+const Boss = React.forwardRef((props = {}, ref) => {
   const { className, ...others } = props;
 
   const cls = classnames({
@@ -99,6 +99,7 @@ const Boss = (props = {}) => {
 
   return (
     <BabyForm
+      ref={ref}
       className={cls}
       value={value}
       onChange={setValue}
@@ -108,6 +109,6 @@ const Boss = (props = {}) => {
       { renderJSON() }
     </BabyForm>
   );
-};
+});
 
 export default Boss;
