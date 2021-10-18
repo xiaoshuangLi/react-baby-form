@@ -7,6 +7,8 @@ const startOrEndWithList = [
   'prop-types',
   'react',
   'react-dom',
+  '@babel/runtime',
+  'regenerator-runtime',
 ];
 
 const externals = [
