@@ -22,6 +22,7 @@ module.exports = {
       commonjs: 'react-baby-form',
     },
     libraryTarget: 'umd',
+    globalObject: 'this',
   },
   resolve: {
     modules: [
