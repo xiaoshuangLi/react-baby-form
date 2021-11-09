@@ -3,7 +3,6 @@ import React, {
   useMemo,
   useState,
   useEffect,
-  useLayoutEffect,
   useContext,
   useImperativeHandle,
   Fragment,
@@ -24,6 +23,7 @@ import {
   usePromise,
   useEventCallback,
   useDebounceCallback,
+  useIsomorphicLayoutEffect,
 } from '../utils/hooks';
 
 import warn from '../utils/warn';
@@ -274,11 +274,11 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
     onChange,
   }), [submit, subscribe, getValue, getErrorsWithMessage, onChange]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     return parentSubscribe ? parentSubscribe(submit) : undefined;
   }, [parentSubscribe, submit]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     resolve && resolve();
   }, [resolve]);
 

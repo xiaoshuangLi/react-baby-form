@@ -276,7 +276,7 @@ const getValue = (event) => {
   const target = event.target === undefined ? event : event.target;
   const value = target.value === undefined ? target : target.value;
 
-  if (target instanceof HTMLElement) {
+  if (typeof HTMLElement !== 'undefined' && target instanceof HTMLElement) {
     return target.type === 'checkbox' ? target.checked : value;
   }
 

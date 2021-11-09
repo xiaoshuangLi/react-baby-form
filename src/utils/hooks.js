@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useLayoutEffect,
   createContext,
 } from 'react';
 import debounce from 'lodash/debounce';
@@ -13,6 +14,12 @@ export const ParentContext = createContext({
   submit: () => Promise.resolve(),
   onChange: () => {},
 });
+
+export const useIsomorphicLayoutEffect = typeof window !== 'undefined'
+  && typeof window.document !== 'undefined'
+  && typeof window.document.createElement !== 'undefined'
+  ? useLayoutEffect
+  : useEffect;
 
 export const useEventCallback = (fn) => {
   const ref = useRef(fn);
