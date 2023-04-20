@@ -15,6 +15,10 @@ jobs:
         node-version: [14.x]
 
     steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+
     - uses: actions/checkout@v2
 
     - name: Use Node.js ${{ matrix.node-version }}
@@ -42,11 +46,15 @@ jobs:
         node-version: [14.x]
 
     steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+
     - uses: actions/checkout@v2
 
     - name: Restore cache from node_modules
       uses: actions/cache@v2
-      with: 
+      with:
         path: node_modules
         key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
@@ -61,11 +69,15 @@ jobs:
         node-version: [14.x]
 
     steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+
     - uses: actions/checkout@v2
 
     - name: Restore cache from node_modules
       uses: actions/cache@v2
-      with: 
+      with:
         path: node_modules
         key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
