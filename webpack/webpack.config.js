@@ -1,4 +1,5 @@
 var path = require('path');
+const TerserPlugin = require("terser-webpack-plugin");
 var { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var projectFolder = path.resolve(__dirname, '../');
@@ -31,6 +32,10 @@ module.exports = {
       'node_modules',
     ],
     extensions: ['.js', '.jsx', '.scss'],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
