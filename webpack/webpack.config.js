@@ -6,6 +6,7 @@ var outputPath = path.resolve(projectFolder, '../lib');
 
 module.exports = {
   mode: 'production',
+  devtool: 'source-map',
   context: projectFolder,
   entry: {
     main: [

@@ -322,12 +322,18 @@ const BabyForm = React.forwardRef((props = {}, ref) => {
   const renderContent = () => {
     const fragment = !Container || Container === Fragment;
 
+    const descendants = typeof children === 'function'
+      ? children(getter())
+      : children;
+
+    const inheritance = { ...others, children: descendants };
+
     if (fragment) {
       return recursiveMap(children, renderChild);
     }
 
     const content = (
-      <Container ref={ref} className={cls} {...others} />
+      <Container ref={ref} className={cls} {...inheritance} />
     );
 
     return recursiveMap(content, renderChild);
